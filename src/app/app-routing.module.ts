@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
+import { RequireAuthGuard } from './guards/AuthGuard';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
+    canActivate: [RequireAuthGuard],
     children: [
       {
         path: '',
@@ -16,6 +18,18 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./demo/dashboard/dashboard.component')
+      },
+      {
+        path: 'accounts',
+        loadChildren: () => import('./main/pages/accounts/accounts.module').then((m) => m.AccountsModule)
+      },
+      {
+        path: 'roles',
+        loadChildren: () => import('./main/pages/roles/roles.module').then((m) => m.RolesModule)
+      },
+      {
+        path: 'permissions',
+        loadChildren: () => import('./main/pages/permissions/permissions.module').then((m) => m.PermissionsModule)
       },
       {
         path: 'basic',
@@ -48,6 +62,10 @@ const routes: Routes = [
         loadChildren: () => import('./demo/pages/authentication/authentication.module').then((m) => m.AuthenticationModule)
       }
     ]
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./main/pages/not-found/not-found.component').then((m) => m.NotFoundComponent)
   }
 ];
 

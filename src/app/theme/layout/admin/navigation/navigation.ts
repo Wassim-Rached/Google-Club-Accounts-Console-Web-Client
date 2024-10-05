@@ -39,6 +39,54 @@ const NavigationItems = [
     ]
   },
   {
+    id: 'accounts',
+    title: 'Accounts',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: 'list',
+        title: 'Accounts List',
+        type: 'item',
+        url: '/accounts/list',
+        classes: 'nav-item',
+        icon: 'feather icon-users'
+      }
+    ]
+  },
+  {
+    id: 'roles',
+    title: 'Roles',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: 'list',
+        title: 'Roles List',
+        type: 'item',
+        url: '/roles/list',
+        classes: 'nav-item',
+        icon: 'feather icon-user-check'
+      }
+    ]
+  },
+  {
+    id: 'permissions',
+    title: 'Permissions',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: 'list',
+        title: 'Permissions List',
+        type: 'item',
+        url: '/permissions/list',
+        classes: 'nav-item',
+        icon: 'feather icon-shield'
+      }
+    ]
+  },
+  {
     id: 'ui-element',
     title: 'UI ELEMENT',
     type: 'group',

@@ -19,7 +19,7 @@
               <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image" />
               <div class="flex-grow-1">
                 <p>
-                  <strong>John Doe</strong>
+                  <strong>{{ account ? account.email : 'loading@server.com' }}</strong>
                   <span class="n-time text-muted">
                     <i class="icon feather icon-clock m-r-10"></i>
                     now
@@ -77,10 +77,10 @@
       <div class="dropdown-menu dropdown-menu-end profile-notification" ngbDropdownMenu>
         <div class="pro-head">
           <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image" />
-          <span>John Doe</span>
-          <a href="javascript:" class="dud-logout" title="Logout">
+          <span>{{ account ? account.email : 'loading@server.com' }}</span>
+          <div class="dud-logout" title="Logout" (click)="logout()" style="cursor: pointer">
             <i class="feather icon-log-out"></i>
-          </a>
+          </div>
         </div>
         <ul class="pro-body">
           <li>

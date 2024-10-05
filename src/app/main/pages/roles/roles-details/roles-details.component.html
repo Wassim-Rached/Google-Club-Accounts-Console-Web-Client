@@ -1,0 +1,26 @@
+<app-card cardTitle="Role Details" [options]="false" blockClass="table-border-style">
+  <div class="container">
+    <h1 class="text-center">{{ role.name }}</h1>
+    <div class="text-right mb-3">
+      <button class="btn btn-primary" (click)="addPermission()">Add Permission</button>
+    </div>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Scope</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let permission of role.permissions">
+          <td>{{ permission.name }}</td>
+          <td>{{ permission.scope }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="removePermission(permission)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-card>
