@@ -6,6 +6,10 @@ const routes: Routes = [
     path: '',
     children: [
       {
+        path: '',
+        redirectTo: 'list'
+      },
+      {
         path: 'list',
         loadComponent: () => import('./roles-list/roles-list.component').then((m) => m.RolesListComponent)
       },
@@ -13,6 +17,10 @@ const routes: Routes = [
         // details
         path: 'details/:id',
         loadComponent: () => import('./roles-details/roles-details.component').then((m) => m.RolesDetailsComponent)
+      },
+      {
+        path: 'create',
+        loadComponent: () => import('./roles-create/roles-create.component').then((m) => m.RolesCreateComponent)
       }
     ]
   }

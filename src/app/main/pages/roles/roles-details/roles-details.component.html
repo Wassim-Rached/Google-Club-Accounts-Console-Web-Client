@@ -1,26 +1,237 @@
-<app-card cardTitle="Role Details" [options]="false" blockClass="table-border-style">
-  <div class="container">
-    <h1 class="text-center">{{ role.name }}</h1>
-    <div class="text-right mb-3">
-      <button class="btn btn-primary" (click)="addPermission()">Add Permission</button>
+<app-not-found *ngIf="role === null; else page"></app-not-found>
+
+<ng-template #page>
+  <ng-template #loading>
+    <div class="progress-bar">
+      <div class="progress-bar-value"></div>
     </div>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Scope</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let permission of role.permissions">
-          <td>{{ permission.name }}</td>
-          <td>{{ permission.scope }}</td>
-          <td>
-            <button class="btn btn-danger btn-sm" (click)="removePermission(permission)">Remove</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</app-card>
+  </ng-template>
+
+  <app-card
+    [cardTitle]="'Role Settings : ' + (role ? role.name + ' (' + (role.scope ? role.scope : '') + ')' : '')"
+    [options]="false"
+    blockClass="table-border-style"
+  >
+    <div class="container mt-4" *ngIf="role; else loading">
+      <div class="text-center text-gray" role="alert">
+        <p class="mb-5">
+          <em>
+            "{{
+              role.description
+                ? role.description
+                : 'This permission is mainly used for controlling access to the system when the user is logged in. It ensures that the user has the right to access the system and is used throughout the system.'
+            }}"
+          </em>
+        </p>
+      </div>
+      <app-card cardTitle="Relations" [options]="false" blockClass="table-border-style">
+        <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
+          <li class="nav-item" [ngbNavItem]="2">
+            <a class="nav-link text-uppercase" aria-controls="accounts" aria-selected="true" ngbNavLink>
+              <i class="fas fa-users"></i>
+              Accounts
+            </a>
+            <ng-template ngbNavContent>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Accounts" />
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive" *ngIf="role.accounts; else loading">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Photo</th>
+                      <th>Email</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let account of role.accounts; let i = index">
+                      <th scope="row">{{ i + 1 }}</th>
+                      <td>
+                        <img [src]="account.photoUrl || defaultPhotoUrl" alt="photo" class="img-thumbnail" width="35" height="35" />
+                      </td>
+                      <td>{{ account.email }}</td>
+                      <td>
+                        <button
+                          class="btn btn-sm"
+                          [ngClass]="{
+                            'btn-danger': !isAccountWaitingToBeRevoked(account),
+                            'btn-secondary': isAccountWaitingToBeRevoked(account)
+                          }"
+                          (click)="toggleAccountRevocation(account)"
+                        >
+                          <i class="fas" [ngClass]="isAccountWaitingToBeRevoked(account) ? 'fa-undo' : 'fa-ban'"></i>
+                          {{ isAccountWaitingToBeRevoked(account) ? 'Undo Revoke' : 'Revoke Role' }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="1">
+            <a class="nav-link text-uppercase" aria-controls="permissions" aria-selected="true" ngbNavLink>
+              <i class="fas fa-key"></i>
+              Permissions
+            </a>
+            <ng-template ngbNavContent>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Permissions" />
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive" *ngIf="role.permissions; else loading">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Scope</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let permission of role.permissions; let i = index">
+                      <th scope="row">{{ i + 1 }}</th>
+                      <td>
+                        <a [routerLink]="['/permissions/details', permission.id]">{{ permission.name }}</a>
+                      </td>
+                      <td>{{ permission.scope }}</td>
+                      <td>
+                        <button
+                          class="btn btn-sm"
+                          [ngClass]="{
+                            'btn-danger': !isPermissionWaitingToBeRevoked(permission),
+                            'btn-secondary': isPermissionWaitingToBeRevoked(permission)
+                          }"
+                          (click)="togglePermissionRevocation(permission)"
+                        >
+                          <i class="fas" [ngClass]="isPermissionWaitingToBeRevoked(permission) ? 'fa-undo' : 'fa-ban'"></i>
+                          {{ isPermissionWaitingToBeRevoked(permission) ? 'Undo Revoke' : 'Revoke Permission' }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </app-card>
+      <app-card cardTitle="Grant Authorities" [options]="false" blockClass="table-border-style">
+        <div class="container mt-4">
+          <div ngbAccordion class="mb-3">
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader></h2>
+              <button ngbAccordionButton>
+                <i class="fas fa-user-plus me-2"></i>
+                Grant To More Accounts
+              </button>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <app-search-account-grant-role
+                    (accountUnchosen)="onAccountUnchosen($event)"
+                    (accountChosen)="onAccountChosen($event)"
+                  ></app-search-account-grant-role>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div ngbAccordion class="mb-3">
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader></h2>
+              <button ngbAccordionButton>
+                <i class="fas fa-key me-2"></i>
+                Grant More Permissions
+              </button>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <app-search-grant-role-permission
+                    (permissionUnchosen)="onPermissionUnchosen($event)"
+                    (permissionChosen)="onPermissionChosen($event)"
+                  ></app-search-grant-role-permission>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card>
+      <app-card cardTitle="Pending Changes" [options]="false" blockClass="table-border-style">
+        <div class="container mt-4">
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="text-success">
+                <i class="fas fa-plus-circle"></i>
+                Permissions to Grant to Role
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!permissionsToBeGranted.length">No permissions to be granted to role.</li>
+                <li class="list-group-item text-success" *ngFor="let permission of permissionsToBeGranted">
+                  {{ permission.scope + '.perm.' + permission.name }}
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-danger">
+                <i class="fas fa-minus-circle"></i>
+                Permissions to Revoke from Role
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!permissionsToBeRevoked.length">No permissions to be revoked from role.</li>
+                <li class="list-group-item text-danger" *ngFor="let permission of permissionsToBeRevoked">
+                  {{ permission.scope + '.perm.' + permission.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-6">
+              <h5 class="text-success">
+                <i class="fas fa-user-plus"></i>
+                Accounts to Grant Role
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!accountsToBeGranted.length">No accounts to be granted role.</li>
+                <li class="list-group-item text-success" *ngFor="let account of accountsToBeGranted">{{ account.email }}</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-danger">
+                <i class="fas fa-user-minus"></i>
+                Accounts to Revoke Role
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!accountsToBeRevoked.length">No accounts to be revoked role.</li>
+                <li class="list-group-item text-danger" *ngFor="let account of accountsToBeRevoked">{{ account.email }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+    <div class="mt-4 d-flex justify-content-end">
+      <button class="btn btn-outline-danger mr-2" (click)="deleteRole()" [disabled]="!role || isDeletingRole">
+        <i class="fas" [ngClass]="isDeletingRole ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
+        Delete Permission
+      </button>
+      <button class="btn btn-success" [disabled]="!role || !hasChanges || isSavingChanges" (click)="saveChanges()">
+        <i class="fas" [ngClass]="isSavingChanges ? 'fa-spinner fa-spin' : 'fa-save'"></i>
+        Save Changes
+      </button>
+    </div>
+  </app-card>
+</ng-template>

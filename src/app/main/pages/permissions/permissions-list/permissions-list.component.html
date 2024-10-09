@@ -1,21 +1,70 @@
 <app-card cardTitle="Permissions List" [options]="false" blockClass="table-border-style">
-  <div class="table-responsive"></div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <!-- <th>Id</th> -->
-        <th>Name</th>
-        <th>Scope</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let permission of permissions; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
-        <!-- <td>{{ permission.id }}</td> -->
-        <td>{{ permission.name }}</td>
-        <td>{{ permission.scope }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-template #loading>
+    <div class="progress-bar">
+      <div class="progress-bar-value"></div>
+    </div>
+  </ng-template>
+
+  <div class="input-group mb-3 search-bar">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search roles..."
+      aria-label="Search roles"
+      #searchTerm
+      (input)="searchPermissions(searchTerm.value)"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" (click)="searchPermissions(searchTerm.value)">Search</button>
+    </div>
+  </div>
+  <div class="mb-3 d-flex align-items-center">
+    <label for="sortBy" class="me-2">Sort by:</label>
+    <select id="sortBy" class="form-select w-auto" #sortBy (change)="sortPermissions(sortBy.value)">
+      <option value="name,asc">Name (A-Z)</option>
+      <option value="name,desc">Name (Z-A)</option>
+      <option value="scope,asc">Scope (A-Z)</option>
+      <option value="scope,desc">Scope (Z-A)</option>
+    </select>
+  </div>
+  <ng-container *ngIf="permissions; else loading">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let permission of permissions.content; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>
+              <a [routerLink]="['/permissions/details', permission.id]">{{ permission.name }}</a>
+            </td>
+            <td>{{ permission.scope }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-4">
+      <ul class="pagination">
+        <li class="page-item">
+          <button class="page-link" (click)="searchPreviousPermissionsPage()" [disabled]="!permissionsHasPreviousPage">Previous</button>
+        </li>
+        <li
+          class="page-item"
+          *ngFor="let page of [].constructor(permissions.page.totalPages); let i = index"
+          [class.active]="i === permissions.page.number"
+        >
+          <div class="page-link" (click)="searchPermissionsPage(i)">{{ i + 1 }}</div>
+        </li>
+        <li class="page-item">
+          <button class="page-link" (click)="searchNextPermissionsPage()" [disabled]="!permissionsHasNextPage">Next</button>
+        </li>
+      </ul>
+    </nav>
+  </ng-container>
 </app-card>

@@ -1,0 +1,105 @@
+<app-not-found *ngIf="permission === null; else page"></app-not-found>
+
+<ng-template #page>
+  <ng-template #loading>
+    <div class="progress-bar">
+      <div class="progress-bar-value"></div>
+    </div>
+  </ng-template>
+  <app-card
+    [cardTitle]="'Permission Settings : ' + (permission ? permission.name : 'loading...')"
+    [options]="false"
+    blockClass="table-border-style"
+  >
+    <!-- show permission description -->
+    <div class="text-center text-gray" role="alert">
+      <p class="mb-5">
+        <em>
+          "{{
+            permission.description
+              ? permission.description
+              : 'This permission is mainly used for controlling access to the system when the user is logged in. It ensures that the user has the right to access the system and is used throughout the system.'
+          }}"
+        </em>
+      </p>
+    </div>
+    <app-card cardTitle="Relations" [options]="false" blockClass="table-border-style">
+      <div class="container mt-4" *ngIf="permission; else loading">
+        <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
+          <li class="nav-item" [ngbNavItem]="2">
+            <a class="nav-link text-uppercase" aria-controls="accounts" aria-selected="true" ngbNavLink>Accounts</a>
+            <ng-template ngbNavContent>
+              <!-- Accounts Content -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Accounts" />
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive" *ngIf="permission.accounts; else loading">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Photo</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let account of permission.accounts; let i = index">
+                      <th scope="row">{{ i + 1 }}</th>
+                      <td>
+                        <img [src]="account.photoUrl || defaultPhotoUrl" alt="photo" class="img-thumbnail" width="35" height="35" />
+                      </td>
+                      <td>
+                        <a [routerLink]="['/accounts/details', account.id]">{{ account.email }}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="1">
+            <a class="nav-link text-uppercase" aria-controls="roles" aria-selected="true" ngbNavLink>Roles</a>
+            <ng-template ngbNavContent>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Roles" />
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive" *ngIf="permission.roles; else loading">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Scope</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let role of permission.roles">
+                      <td>
+                        <a [routerLink]="['/roles/details', role.id]">{{ role.name }}</a>
+                      </td>
+                      <td>{{ role.scope }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </app-card>
+    <!-- delete button -->
+    <div class="mt-4">
+      <button class="btn btn-outline-danger" (click)="deletePermission()" [disabled]="!permission">Delete Permission</button>
+    </div>
+  </app-card>
+</ng-template>

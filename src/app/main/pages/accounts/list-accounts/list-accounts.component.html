@@ -1,19 +1,70 @@
-<app-card cardTitle="Hover Table" [options]="false" blockClass="table-border-style">
-  <div class="table-responsive"></div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Id</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let account of accounts; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
-        <td>{{ account._id }}</td>
-        <td>{{ account.email }}</td>
-      </tr>
-    </tbody>
-  </table>
+<app-card cardTitle="Accounts Table" [options]="false" blockClass="table-border-style">
+  <ng-template #loading>
+    <div class="progress-bar">
+      <div class="progress-bar-value"></div>
+    </div>
+  </ng-template>
+
+  <div class="input-group mb-3 search-bar">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search roles..."
+      aria-label="Search roles"
+      #searchTerm
+      (input)="searchAccounts(searchTerm.value, true)"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" (click)="searchAccounts(searchTerm.value)">Search</button>
+    </div>
+  </div>
+  <div class="mb-3 d-flex align-items-center">
+    <label for="sortBy" class="me-2">Sort by:</label>
+    <select id="sortBy" class="form-select w-auto" #sortBy (change)="sortAccounts(sortBy.value)">
+      <option value="email,asc">Email (A-Z)</option>
+      <option value="email,desc">Email (Z-A)</option>
+    </select>
+  </div>
+  <ng-container *ngIf="accounts; else loading">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>#</th>
+            <th>Photo</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of accounts.content; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>
+              <img [src]="account.photoUrl || defaultPhotoUrl" alt="photo" class="img-thumbnail" width="35" height="35" />
+            </td>
+            <td>
+              <a [routerLink]="['/accounts/details', account.id]">{{ account.email }}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-4">
+      <ul class="pagination">
+        <li class="page-item">
+          <button class="page-link" (click)="searchPreviousAccountsPage()" [disabled]="!accountsHasPreviousPage">Previous</button>
+        </li>
+        <li
+          class="page-item"
+          *ngFor="let page of [].constructor(accounts.page.totalPages); let i = index"
+          [class.active]="i === accounts.page.number"
+        >
+          <div class="page-link" (click)="searchAccountsPage(i)">{{ i + 1 }}</div>
+        </li>
+        <li class="page-item">
+          <button class="page-link" (click)="searchNextAccountsPage()" [disabled]="!accountsHasNextPage">Next</button>
+        </li>
+      </ul>
+    </nav>
+  </ng-container>
 </app-card>

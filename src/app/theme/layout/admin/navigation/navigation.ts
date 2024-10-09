@@ -67,6 +67,14 @@ const NavigationItems = [
         url: '/roles/list',
         classes: 'nav-item',
         icon: 'feather icon-user-check'
+      },
+      {
+        id: 'create',
+        title: 'Create Role',
+        type: 'item',
+        url: '/roles/create',
+        classes: 'nav-item',
+        icon: 'feather icon-user-plus'
       }
     ]
   },
@@ -81,6 +89,14 @@ const NavigationItems = [
         title: 'Permissions List',
         type: 'item',
         url: '/permissions/list',
+        classes: 'nav-item',
+        icon: 'feather icon-shield'
+      },
+      {
+        id: 'create',
+        title: 'Create Permission',
+        type: 'item',
+        url: '/permissions/create',
         classes: 'nav-item',
         icon: 'feather icon-shield'
       }

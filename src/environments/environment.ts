@@ -8,7 +8,9 @@ export const environment = {
   appVersion: packageInfo.version,
   production: true,
   cas: 'https://cas-server.azurewebsites.net',
-  ics: 'https://ics-server.azurewebsites.net'
+  // ics: 'https://ics-server.azurewebsites.net'
+  ics: 'http://localhost:8080',
+  defaultPhotoUrl: 'assets/images/user/avatar-2.jpg'
 };
 /*
  * For easier debugging in development mode, you can import the following file
