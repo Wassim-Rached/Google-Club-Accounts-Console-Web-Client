@@ -15,6 +15,8 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 // third party
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NotFoundComponent } from 'src/app/main/pages/not-found/not-found.component';
+import { PermissionPublicNamePipe } from 'src/app/main/pipes/permission-public-name.pipe';
+import { RolePublicNamePipe } from 'src/app/main/pipes/role-public-name.pipe';
 
 @NgModule({
   declarations: [SpinnerComponent],
@@ -27,7 +29,9 @@ import { NotFoundComponent } from 'src/app/main/pages/not-found/not-found.compon
     NgScrollbarModule,
     NgbCollapseModule,
     BreadcrumbsComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    PermissionPublicNamePipe,
+    RolePublicNamePipe
   ],
   exports: [
     CommonModule,
@@ -39,7 +43,9 @@ import { NotFoundComponent } from 'src/app/main/pages/not-found/not-found.compon
     NgScrollbarModule,
     NgbCollapseModule,
     BreadcrumbsComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    PermissionPublicNamePipe,
+    RolePublicNamePipe
   ]
 })
 export class SharedModule {}

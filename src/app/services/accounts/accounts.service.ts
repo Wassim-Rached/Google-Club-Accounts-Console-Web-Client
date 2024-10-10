@@ -1,10 +1,34 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Role } from '../roles/roles.service';
 import { Permission } from '../permissions.service';
 import { Page } from 'src/types';
+
+export interface AccountEditResponse {
+  email: string;
+  roles: {
+    granted: string[];
+    revoked: string[];
+  };
+  permissions: {
+    granted: string[];
+    revoked: string[];
+  };
+}
+
+export interface AccountEditRequest {
+  email: string;
+  roles: {
+    grant: string[];
+    revoke: string[];
+  };
+  permissions: {
+    grant: string[];
+    revoke: string[];
+  };
+}
 
 export interface Account {
   id: string;
@@ -38,5 +62,11 @@ export class AccountsService {
 
   getAccountById(id: string): Observable<Account> {
     return this.http.get<Account>(`${environment.ics}/api/accounts/${id}`);
+  }
+
+  editAccount(body: AccountEditRequest): Observable<AccountEditResponse> {
+    return this.http
+      .post<AccountEditResponse[]>(`${environment.ics}/api/accounts/authorities`, [body])
+      .pipe(map((response) => response[0]));
   }
 }

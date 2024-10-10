@@ -71,4 +71,8 @@ export class RolesService {
   editRole(body: RoleEditRequest): Observable<RoleEditResponse> {
     return this.http.post<RoleEditResponse[]>(`${environment.ics}/api/roles/edit`, [body]).pipe(map((responses) => responses[0]));
   }
+
+  public static getRolePublicName(role: Role) {
+    return role.scope + '.role.' + role.name;
+  }
 }

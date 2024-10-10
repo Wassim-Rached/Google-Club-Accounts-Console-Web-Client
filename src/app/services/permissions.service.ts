@@ -44,4 +44,8 @@ export class PermissionsService {
   deletePermission(id: string): Observable<Permission> {
     return this.http.delete<Permission>(`${environment.ics}/api/permissions/${id}`);
   }
+
+  public static getPermissionPublicName(permission: Permission) {
+    return permission.scope + '.perm.' + permission.name;
+  }
 }

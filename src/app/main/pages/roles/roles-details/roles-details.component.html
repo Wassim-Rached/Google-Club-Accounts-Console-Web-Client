@@ -7,11 +7,7 @@
     </div>
   </ng-template>
 
-  <app-card
-    [cardTitle]="'Role Settings : ' + (role ? role.name + ' (' + (role.scope ? role.scope : '') + ')' : '')"
-    [options]="false"
-    blockClass="table-border-style"
-  >
+  <app-card [cardTitle]="'Role Settings : ' + (role ? (role | rolePublicName) : '')" [options]="false" blockClass="table-border-style">
     <div class="container mt-4" *ngIf="role; else loading">
       <div class="text-center text-gray" role="alert">
         <p class="mb-5">

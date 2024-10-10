@@ -1,103 +1,223 @@
-<ng-template #loading>
-  <div class="progress-bar">
-    <div class="progress-bar-value"></div>
-  </div>
-</ng-template>
+<app-not-found *ngIf="account === null; else page"></app-not-found>
 
-<app-card [cardTitle]="'Account Settings : ' + account?.email" [options]="false" blockClass="table-border-style">
-  <div class="container mt-4" *ngIf="account; else loading">
-    <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
-      <li class="nav-item" [ngbNavItem]="2">
-        <a class="nav-link text-uppercase" aria-controls="roles" aria-selected="true" ngbNavLink>Roles</a>
-        <ng-template ngbNavContent>
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="input-group">
-              <div class="input-group-append">
-                <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
-              </div>
-              <input type="text" class="form-control" placeholder="Search Roles" />
-              <button
-                class="btn btn-sm btn-outline-primary"
-                (click)="isCollapsedRole = !isCollapsedRole"
-                [attr.aria-expanded]="!isCollapsedRole"
-                aria-controls="collapseRole"
-                class="btn btn-sm btn-outline-primary col-2"
-              >
-                Grant Role
-              </button>
-            </div>
-            <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsedRole">XD</div>
-          </div>
-          <div class="table-responsive" *ngIf="account.roles; else loading">
-            <table class="table table-bordered table-hover">
-              <caption class="text-center">Roles with this Account</caption>
-              <thead class="thead-dark">
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Scope</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let role of account.roles; let i = index">
-                  <th scope="row">{{ i + 1 }}</th>
-                  <td>
-                    <a [routerLink]="['/roles/details', role.id]">{{ role.name }}</a>
-                  </td>
-                  <td>{{ role.scope }}</td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" (click)="revokeRole(role)">Revoke Role</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </ng-template>
-      </li>
-      <li class="nav-item" [ngbNavItem]="1">
-        <a class="nav-link text-uppercase" aria-controls="permissions" aria-selected="true" ngbNavLink>Permissions</a>
-        <ng-template ngbNavContent>
-          <div class="row justify-content-between align-items-center">
-            <div class="col-9 input-group">
-              <input type="text" class="form-control" placeholder="Search Permissions" />
-              <div class="input-group-append">
-                <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
-              </div>
-            </div>
-            <button class="col-3 btn btn-sm btn-outline-primary" (click)="grantPermission()">Grant Permission</button>
-          </div>
-          <div class="table-responsive" *ngIf="account.permissions; else loading">
-            <table class="table table-bordered table-hover">
-              <caption class="text-center">Permissions Table</caption>
-              <thead class="thead-dark">
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Scope</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let permission of account.permissions; let i = index">
-                  <th scope="row">{{ i + 1 }}</th>
-                  <td>
-                    <a [routerLink]="['/permissions/details', permission.id]">{{ permission.name }}</a>
-                  </td>
-                  <td>{{ permission.scope }}</td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" (click)="revokePermission(permission)">Revoke Permission</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </ng-template>
-      </li>
-    </ul>
-    <div [ngbNavOutlet]="nav"></div>
-    <div class="mt-4">
-      <button class="btn btn-success" (click)="saveChanges()">Save Changes</button>
+<ng-template #page>
+  <ng-template #loading>
+    <div class="progress-bar">
+      <div class="progress-bar-value"></div>
     </div>
-  </div>
-</app-card>
+  </ng-template>
+
+  <app-card [cardTitle]="'Role Settings : ' + account?.email" [options]="false" blockClass="table-border-style">
+    <div class="container mt-4" *ngIf="account; else loading">
+      <app-card cardTitle="Authorities List" [options]="false" blockClass="table-border-style">
+        <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
+          <li class="nav-item" [ngbNavItem]="2">
+            <a class="nav-link text-uppercase" aria-controls="roles" aria-selected="true" ngbNavLink>
+              <i class="fas fa-user-tag"></i>
+              Roles
+            </a>
+            <ng-template ngbNavContent>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Roles" />
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive" *ngIf="account.roles; else loading">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Scope</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let role of account.roles; let i = index">
+                      <th scope="row">{{ i + 1 }}</th>
+                      <td>
+                        <a [routerLink]="['/roles/details', role.id]">{{ role.name }}</a>
+                      </td>
+                      <td>{{ role.scope }}</td>
+                      <td>
+                        <button
+                          class="btn btn-sm"
+                          [ngClass]="{
+                            'btn-danger': !isRoleWaitingToBeRevoked(role),
+                            'btn-secondary': isRoleWaitingToBeRevoked(role)
+                          }"
+                          (click)="toggleRoleRevocation(role)"
+                        >
+                          <i class="fas" [ngClass]="isRoleWaitingToBeRevoked(role) ? 'fa-undo' : 'fa-ban'"></i>
+                          {{ isRoleWaitingToBeRevoked(role) ? 'Undo Revoke' : 'Revoke Permission' }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="1">
+            <a class="nav-link text-uppercase" aria-controls="permissions" aria-selected="true" ngbNavLink>
+              <i class="fas fa-key"></i>
+              Permissions
+            </a>
+            <ng-template ngbNavContent>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Permissions" />
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="height: 100%"><i class="fas fa-search"></i></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive" *ngIf="account.permissions; else loading">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Scope</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let permission of account.permissions; let i = index">
+                      <th scope="row">{{ i + 1 }}</th>
+                      <td>
+                        <a [routerLink]="['/permissions/details', permission.id]">{{ permission.name }}</a>
+                      </td>
+                      <td>{{ permission.scope }}</td>
+                      <td>
+                        <button
+                          class="btn btn-sm"
+                          [ngClass]="{
+                            'btn-danger': !isPermissionWaitingToBeRevoked(permission),
+                            'btn-secondary': isPermissionWaitingToBeRevoked(permission)
+                          }"
+                          (click)="togglePermissionRevocation(permission)"
+                        >
+                          <i class="fas" [ngClass]="isPermissionWaitingToBeRevoked(permission) ? 'fa-undo' : 'fa-ban'"></i>
+                          {{ isPermissionWaitingToBeRevoked(permission) ? 'Undo Revoke' : 'Revoke Permission' }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </app-card>
+      <app-card cardTitle="Grant Authorities" [options]="false" blockClass="table-border-style">
+        <div class="container mt-4">
+          <div ngbAccordion class="mb-3">
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader></h2>
+              <button ngbAccordionButton>
+                <i class="fas fa-user-plus me-2"></i>
+                Grant More Roles
+              </button>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <app-search-roles (roleUnchosen)="onRoleUnchosen($event)" (roleChosen)="onRoleChosen($event)"></app-search-roles>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div ngbAccordion class="mb-3">
+            <div ngbAccordionItem>
+              <h2 ngbAccordionHeader></h2>
+              <button ngbAccordionButton>
+                <i class="fas fa-key me-2"></i>
+                Grant More Permissions
+              </button>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <app-search-grant-role-permission
+                    (permissionUnchosen)="onPermissionUnchosen($event)"
+                    (permissionChosen)="onPermissionChosen($event)"
+                  ></app-search-grant-role-permission>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card>
+      <app-card cardTitle="Pending Changes" [options]="false" blockClass="table-border-style">
+        <div class="container mt-4">
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="text-success">
+                <i class="fas fa-plus-circle"></i>
+                Permissions to Grant to Role
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!permissionsToBeGranted.length">No permissions to be granted to role.</li>
+                <li class="list-group-item text-success" *ngFor="let permission of permissionsToBeGranted">
+                  {{ permission.scope + '.perm.' + permission.name }}
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-danger">
+                <i class="fas fa-minus-circle"></i>
+                Permissions to Revoke from Role
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!permissionsToBeRevoked.length">No permissions to be revoked from role.</li>
+                <li class="list-group-item text-danger" *ngFor="let permission of permissionsToBeRevoked">
+                  {{ permission.scope + '.perm.' + permission.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-6">
+              <h5 class="text-success">
+                <i class="fas fa-user-plus"></i>
+                Roles to Grant to Account
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!rolesToBeGranted.length">No roles to be granted to account.</li>
+                <li class="list-group-item text-success" *ngFor="let role of rolesToBeGranted">{{ role.scope + '.role.' + role.name }}</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-danger">
+                <i class="fas fa-user-minus"></i>
+                Roles to Revoke from Account
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="!rolesToBeRevoked.length">No roles to be revoked from account.</li>
+                <li class="list-group-item text-danger" *ngFor="let role of rolesToBeRevoked">{{ role.scope + '.role.' + role.name }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+    <div class="mt-4 d-flex justify-content-end">
+      <button class="btn btn-outline-danger mr-2" (click)="deleteAccount()" [disabled]="!account || isDeletingAccount">
+        <i class="fas" [ngClass]="isDeletingAccount ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
+        Delete Account
+      </button>
+      <button class="btn btn-outline-warning mr-2" (click)="suspendAccount()" [disabled]="!account || isSuspendingAccount">
+        <i class="fas" [ngClass]="isSuspendingAccount ? 'fa-spinner fa-spin' : 'fa-pause-circle'"></i>
+        Suspend Account
+      </button>
+      <button class="btn btn-success" [disabled]="!account || !hasChanges || isSavingChanges" (click)="saveChanges()">
+        <i class="fas" [ngClass]="isSavingChanges ? 'fa-spinner fa-spin' : 'fa-save'"></i>
+        Save Changes
+      </button>
+    </div>
+  </app-card>
+</ng-template>

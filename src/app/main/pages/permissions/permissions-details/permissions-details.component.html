@@ -7,7 +7,7 @@
     </div>
   </ng-template>
   <app-card
-    [cardTitle]="'Permission Settings : ' + (permission ? permission.name : 'loading...')"
+    [cardTitle]="'Permission Settings : ' + (permission ? (permission | permissionPublicName) : 'loading...')"
     [options]="false"
     blockClass="table-border-style"
   >
