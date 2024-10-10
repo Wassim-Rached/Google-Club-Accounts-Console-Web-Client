@@ -4,5 +4,6 @@ export const environment = {
   appVersion: packageInfo.version,
   production: true,
   cas: 'https://cas-server.azurewebsites.net',
-  ics: 'https://ics-server.azurewebsites.net'
+  ics: 'https://ics-server.azurewebsites.net',
+  defaultPhotoUrl: 'assets/images/user/avatar-2.jpg'
 };
