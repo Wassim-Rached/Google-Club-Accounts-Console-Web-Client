@@ -7,6 +7,8 @@ import { Role, RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { SearchAccountGrantRoleComponent } from '../../../components/search-account-grant-role/search-account-grant-role.component';
 import { SearchRolesComponent } from '../../../components/search-roles/search-roles.component';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-accounts-details',
@@ -23,7 +25,7 @@ export class AccountsDetailsComponent implements OnInit {
   grantRolesChild: SearchRolesComponent;
 
   account?: Account;
-  // isCollapsedRole = true;
+  // save changes related properties
   toBeGrantedPermissions: Permission[] = [];
   toBeRevokedPermissions: Permission[] = [];
   toBeGrantedRoles: Role[] = [];
@@ -31,10 +33,15 @@ export class AccountsDetailsComponent implements OnInit {
   isSavingChanges = false;
   isDeletingAccount = false;
   isSuspendingAccount = false;
+  // authorities cache related properties
+  authoritiesCache: { [scope: string]: string[] } | undefined;
+  isLoadingAuthoritiesCache = false;
 
   constructor(
     private accountsService: AccountsService,
-    private route: ActivatedRoute
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -154,20 +161,17 @@ export class AccountsDetailsComponent implements OnInit {
       }
     };
 
-    console.log(JSON.stringify(body));
-
     this.isSavingChanges = true;
     this.accountsService.editAccount(body).subscribe({
       next: (response) => {
-        console.log(response);
         this.clearChanges();
         this.refreshAccount();
-        alert('Account updated successfully');
+        this.toastrService.success('Changes saved successfully');
         this.isSavingChanges = false;
       },
       error: (error) => {
         console.error(error);
-        alert('Failed to update account');
+        this.toastrService.error('Failed to save changes');
         this.isSavingChanges = false;
       }
     });
@@ -188,5 +192,43 @@ export class AccountsDetailsComponent implements OnInit {
 
   suspendAccount() {
     alert('Not implemented yet');
+  }
+
+  // authorities cache related methods
+  refreshAuthoritiesCache() {
+    const accountId = this.route.snapshot.params['id'];
+    this.isLoadingAuthoritiesCache = true;
+    this.authService.getAuthoritiesCache(accountId).subscribe({
+      next: (cache) => {
+        console.log(cache);
+        this.isLoadingAuthoritiesCache = false;
+        this.authoritiesCache = cache;
+      },
+      error: (error) => {
+        this.isLoadingAuthoritiesCache = false;
+        console.error(error);
+      }
+    });
+  }
+
+  clearAuthoritiesCache() {
+    const confirm = window.confirm('Are you sure you want to clear authorities cache?');
+    if (!confirm) return;
+
+    const accountId = this.route.snapshot.params['id'];
+    this.authService.clearAuthoritiesCache(accountId).subscribe({
+      next: () => {
+        this.toastrService.success('Authorities cache cleared successfully');
+        this.refreshAuthoritiesCache();
+      },
+      error: (error) => {
+        console.error(error);
+        this.toastrService.error('Failed to clear authorities cache');
+      }
+    });
+  }
+
+  get authoritiesCacheKeys() {
+    return this.authoritiesCache ? Object.keys(this.authoritiesCache) : [];
   }
 }

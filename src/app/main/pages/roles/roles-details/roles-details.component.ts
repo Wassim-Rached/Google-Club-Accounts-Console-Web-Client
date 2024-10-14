@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { environment } from 'src/environments/environment';
 import { SearchAccountGrantRoleComponent } from '../../../components/search-account-grant-role/search-account-grant-role.component';
 import { SearchGrantRolePermissionComponent } from '../../../components/search-grant-role-permission/search-grant-role-permission.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-roles-details',
@@ -33,7 +34,8 @@ export class RolesDetailsComponent implements OnInit {
   constructor(
     private rolesService: RolesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +64,7 @@ export class RolesDetailsComponent implements OnInit {
     const rolePublicName = this.generateRolePublicName(this.role);
     const input = prompt('Type the role name to confirm deletion');
     if (input !== rolePublicName) {
-      alert('Role name does not match');
+      this.toastrService.error('Role name does not match');
       return;
     }
     if (confirmation) {
@@ -70,13 +72,13 @@ export class RolesDetailsComponent implements OnInit {
       this.isDeletingRole = true;
       this.rolesService.deleteRole(roleId).subscribe({
         next: () => {
-          alert('Role deleted successfully');
+          this.toastrService.success('Role deleted successfully');
           this.isDeletingRole = false;
           this.router.navigate(['/roles']);
         },
         error: (error) => {
           console.error(error);
-          alert('Failed to delete role');
+          this.toastrService.error('Failed to delete role');
           this.isDeletingRole = false;
         }
       });
@@ -181,20 +183,17 @@ export class RolesDetailsComponent implements OnInit {
       }
     };
 
-    console.log(JSON.stringify(body));
-
     this.isSavingChanges = true;
     this.rolesService.editRole(body).subscribe({
       next: (response) => {
-        console.log(response);
         this.clearChanges();
         this.refreshRole();
-        alert('Role updated successfully');
+        this.toastrService.success('Changes saved successfully');
         this.isSavingChanges = false;
       },
       error: (error) => {
         console.error(error);
-        alert('Failed to update role');
+        this.toastrService.error('Failed to save changes');
         this.isSavingChanges = false;
       }
     });

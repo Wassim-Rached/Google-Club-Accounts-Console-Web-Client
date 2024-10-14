@@ -28,8 +28,8 @@ export class AuthService {
   refreshAccount(): void {
     if (this.isAuthenticated()) {
       this.accountsService.getMyAccount().subscribe({
-        next: (response: any) => {
-          this.currentAccountSubject.next(response.data);
+        next: (account: Account) => {
+          this.currentAccountSubject.next(account);
         },
         error: (error) => {
           console.error(error);
@@ -70,5 +70,20 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  // cache related methods
+  getAuthoritiesCache(accountId: string): Observable<{ [scope: string]: string[] }> {
+    return this.http
+      .get<{ authorities: { [scope: string]: string[] } }>(`${environment.cas}/api/token/authorities/cache/${accountId}`)
+      .pipe(
+        map((response) => {
+          return response.authorities;
+        })
+      );
+  }
+
+  clearAuthoritiesCache(accountId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.cas}/api/token/authorities/cache/${accountId}`);
   }
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Permission, PermissionsService } from 'src/app/services/permissions.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NotFoundComponent } from '../../not-found/not-found.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-permissions-details',
@@ -18,7 +19,8 @@ export class PermissionsDetailsComponent implements OnInit {
   constructor(
     private permissionsService: PermissionsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -46,12 +48,12 @@ export class PermissionsDetailsComponent implements OnInit {
       const permissionId = this.route.snapshot.params['id'];
       this.permissionsService.deletePermission(permissionId).subscribe({
         next: () => {
-          alert('Permission deleted successfully');
+          this.toastrService.success('Permission deleted successfully');
           this.router.navigate(['/permissions']);
         },
         error: (error) => {
           console.error(error);
-          alert('Failed to delete permission');
+          this.toastrService.error('Failed to delete permission');
         }
       });
     }

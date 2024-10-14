@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 
 // project import
@@ -24,6 +24,7 @@ import { NavSearchComponent } from './theme/layout/admin/nav-bar/nav-left/nav-se
 import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
 import { ServicesModule } from './services/services.module';
+import { provideToastr } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { ServicesModule } from './services/services.module';
     ToggleFullScreenDirective
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SharedModule, BrowserAnimationsModule, ServicesModule],
-  providers: [NavigationItem],
+  providers: [NavigationItem, provideAnimations(), provideToastr({ positionClass: 'toast-bottom-right' })],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -5,6 +5,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { SearchGrantRolePermissionComponent } from '../../../components/search-grant-role-permission/search-grant-role-permission.component';
 import { Permission } from 'src/app/services/permissions.service';
 import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-roles-create',
@@ -25,7 +26,8 @@ export class RolesCreateComponent implements OnInit {
 
   constructor(
     private rolesService: RolesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +48,7 @@ export class RolesCreateComponent implements OnInit {
 
     this.rolesService.createRole(body).subscribe({
       next: (_) => {
-        alert('Permission created successfully');
+        this.toastrService.success('Role created successfully');
         this.formGroup.reset();
         this.clearChosenPermissions();
         this.isSubmitting = false;
