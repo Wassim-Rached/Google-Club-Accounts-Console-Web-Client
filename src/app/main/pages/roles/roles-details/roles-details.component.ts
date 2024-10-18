@@ -5,22 +5,23 @@ import { Permission } from 'src/app/services/permissions.service';
 import { Role, RoleEditRequest, RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { environment } from 'src/environments/environment';
-import { SearchAccountGrantRoleComponent } from '../../../components/search-account-grant-role/search-account-grant-role.component';
-import { SearchGrantRolePermissionComponent } from '../../../components/search-grant-role-permission/search-grant-role-permission.component';
+import { SearchAccountsComponent } from '../../../components/search-account-grant-role/search-accounts.component';
+import { SearchPermissionsComponent } from '../../../components/search-permissions/search-permissions.component';
 import { ToastrService } from 'ngx-toastr';
+import { SearchRolesComponent } from '../../../components/search-roles/search-roles.component';
 
 @Component({
   selector: 'app-roles-details',
   standalone: true,
-  imports: [RouterModule, SharedModule, SearchAccountGrantRoleComponent, SearchGrantRolePermissionComponent],
+  imports: [RouterModule, SharedModule, SearchAccountsComponent, SearchPermissionsComponent, SearchRolesComponent],
   templateUrl: './roles-details.component.html',
   styleUrl: './roles-details.component.scss'
 })
 export class RolesDetailsComponent implements OnInit {
-  @ViewChild(SearchGrantRolePermissionComponent)
-  grantPermissionsChild: SearchGrantRolePermissionComponent;
-  @ViewChild(SearchAccountGrantRoleComponent)
-  grantAccountChild: SearchAccountGrantRoleComponent;
+  @ViewChild(SearchPermissionsComponent)
+  grantPermissionsChild: SearchPermissionsComponent;
+  @ViewChild(SearchAccountsComponent)
+  grantAccountChild: SearchAccountsComponent;
 
   role?: Role;
   defaultPhotoUrl = environment.defaultPhotoUrl;

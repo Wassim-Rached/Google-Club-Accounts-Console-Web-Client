@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { SearchGrantRolePermissionComponent } from 'src/app/main/components/search-grant-role-permission/search-grant-role-permission.component';
+import { SearchPermissionsComponent } from 'src/app/main/components/search-permissions/search-permissions.component';
 import { Account, AccountEditRequest, AccountsService } from 'src/app/services/accounts/accounts.service';
 import { Permission, PermissionsService } from 'src/app/services/permissions.service';
 import { Role, RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-import { SearchAccountGrantRoleComponent } from '../../../components/search-account-grant-role/search-account-grant-role.component';
 import { SearchRolesComponent } from '../../../components/search-roles/search-roles.component';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -13,13 +12,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-accounts-details',
   standalone: true,
-  imports: [SharedModule, RouterModule, SearchAccountGrantRoleComponent, SearchGrantRolePermissionComponent, SearchRolesComponent],
+  imports: [SharedModule, RouterModule, SearchPermissionsComponent, SearchRolesComponent],
   templateUrl: './accounts-details.component.html',
   styleUrl: './accounts-details.component.scss'
 })
 export class AccountsDetailsComponent implements OnInit {
-  @ViewChild(SearchGrantRolePermissionComponent)
-  grantPermissionsChild: SearchGrantRolePermissionComponent;
+  @ViewChild(SearchPermissionsComponent)
+  grantPermissionsChild: SearchPermissionsComponent;
 
   @ViewChild(SearchRolesComponent)
   grantRolesChild: SearchRolesComponent;
@@ -230,5 +229,9 @@ export class AccountsDetailsComponent implements OnInit {
 
   get authoritiesCacheKeys() {
     return this.authoritiesCache ? Object.keys(this.authoritiesCache) : [];
+  }
+
+  hasAuthoritiesCache() {
+    return this.authoritiesCache && this.authoritiesCacheKeys.length > 0;
   }
 }

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-import { SearchGrantRolePermissionComponent } from '../../../components/search-grant-role-permission/search-grant-role-permission.component';
+import { SearchPermissionsComponent } from '../../../components/search-permissions/search-permissions.component';
 import { Permission } from 'src/app/services/permissions.service';
 import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -10,13 +10,13 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-roles-create',
   standalone: true,
-  imports: [SharedModule, SearchGrantRolePermissionComponent, NgbAccordionDirective],
+  imports: [SharedModule, SearchPermissionsComponent, NgbAccordionDirective],
   templateUrl: './roles-create.component.html',
   styleUrl: './roles-create.component.scss'
 })
 export class RolesCreateComponent implements OnInit {
-  @ViewChild(SearchGrantRolePermissionComponent)
-  child: SearchGrantRolePermissionComponent;
+  @ViewChild(SearchPermissionsComponent)
+  child: SearchPermissionsComponent;
 
   formGroup: FormGroup;
   isSubmitting = false;
@@ -71,5 +71,9 @@ export class RolesCreateComponent implements OnInit {
   clearChosenPermissions() {
     this.chosenPermissions = [];
     this.child.clearChosenPermissions();
+  }
+
+  hasChosenPermissions() {
+    return this.chosenPermissions.length > 0;
   }
 }

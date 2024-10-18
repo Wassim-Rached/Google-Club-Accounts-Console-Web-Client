@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Role, RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Page } from 'src/types';
@@ -16,6 +16,7 @@ export class SearchRolesComponent implements OnInit {
   searchTimeoutId?: number;
   @Output() roleChosen = new EventEmitter<Role>();
   @Output() roleUnchosen = new EventEmitter<Role>();
+  @Input() excludedRoles: Role[] = [];
 
   constructor(private rolesService: RolesService) {}
 
@@ -50,14 +51,18 @@ export class SearchRolesComponent implements OnInit {
     }, 300);
   }
 
-  haveBeenChosen(permission: Role) {
-    return this.chosenRoles.filter((p) => p.id === permission.id).length > 0;
+  haveBeenChosen(role: Role) {
+    return this.chosenRoles.filter((p) => p.id === role.id).length > 0;
   }
 
-  choseRole(permission: Role) {
+  isExcluded(role: Role) {
+    return this.excludedRoles.filter((p) => p.id === role.id).length > 0;
+  }
+
+  choseRole(role: Role) {
     if (!this.roles || !this.roles.content) return;
-    this.chosenRoles.push(permission);
-    this.roleChosen.emit(permission);
+    this.chosenRoles.push(role);
+    this.roleChosen.emit(role);
   }
 
   unchoseRole(role: Role) {

@@ -4,18 +4,19 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Page } from 'src/types';
 
 @Component({
-  selector: 'app-search-grant-role-permission',
+  selector: 'app-search-permissions',
   standalone: true,
   imports: [SharedModule],
-  templateUrl: './search-grant-role-permission.component.html',
-  styleUrl: './search-grant-role-permission.component.scss'
+  templateUrl: './search-permissions.component.html',
+  styleUrl: './search-permissions.component.scss'
 })
-export class SearchGrantRolePermissionComponent implements OnInit {
+export class SearchPermissionsComponent implements OnInit {
   permissions?: Page<Permission>;
   chosenPermissions: Permission[] = [];
   searchTimeoutId?: number;
   @Output() permissionChosen = new EventEmitter<Permission>();
   @Output() permissionUnchosen = new EventEmitter<Permission>();
+  @Input() excludedPermissions: Permission[] = [];
 
   constructor(private permissionsService: PermissionsService) {}
 
@@ -57,6 +58,10 @@ export class SearchGrantRolePermissionComponent implements OnInit {
 
   haveBeenChosen(permission: Permission) {
     return this.chosenPermissions.filter((p) => p.id === permission.id).length > 0;
+  }
+
+  isExcluded(permission: Permission) {
+    return this.excludedPermissions.filter((p) => p.id === permission.id).length > 0;
   }
 
   chosePermission(permission: Permission) {

@@ -1,22 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Account, AccountsService } from 'src/app/services/accounts/accounts.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Page } from 'src/types';
 
 @Component({
-  selector: 'app-search-account-grant-role',
+  selector: 'app-search-accounts',
   standalone: true,
   imports: [CommonModule, SharedModule],
-  templateUrl: './search-account-grant-role.component.html',
-  styleUrl: './search-account-grant-role.component.scss'
+  templateUrl: './search-accounts.component.html',
+  styleUrl: './search-accounts.component.scss'
 })
-export class SearchAccountGrantRoleComponent implements OnInit {
+export class SearchAccountsComponent implements OnInit {
   accounts?: Page<Account>;
   chosenAccounts: Account[] = [];
   searchTimeoutId?: number;
   @Output() accountChosen = new EventEmitter<Account>();
   @Output() accountUnchosen = new EventEmitter<Account>();
+  @Input() excludedAccounts: Account[] = [];
 
   constructor(private accountsService: AccountsService) {}
 
@@ -53,6 +54,10 @@ export class SearchAccountGrantRoleComponent implements OnInit {
 
   haveBeenChosen(account: Account) {
     return this.chosenAccounts.filter((p) => p.id === account.id).length > 0;
+  }
+
+  isExcluded(account: Account) {
+    return this.excludedAccounts.filter((p) => p.id === account.id).length > 0;
   }
 
   choseaccount(account: Account) {

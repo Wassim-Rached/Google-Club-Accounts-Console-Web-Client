@@ -7,9 +7,9 @@
     </div>
   </ng-template>
 
-  <app-card [cardTitle]="'Role Settings : ' + account?.email" [options]="false" blockClass="table-border-style">
+  <app-card [cardTitle]="'Account Settings : ' + account?.email" [options]="false" blockClass="table-border-style">
     <div class="container mt-4" *ngIf="account; else loading">
-      <app-card cardTitle="Authorities List" [options]="false" blockClass="table-border-style">
+      <app-card cardTitle="Owns Authorities" [options]="false" blockClass="table-border-style">
         <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
           <li class="nav-item" [ngbNavItem]="2">
             <a class="nav-link text-uppercase" aria-controls="roles" aria-selected="true" ngbNavLink>
@@ -33,7 +33,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Scope</th>
-                      <th>Actions</th>
+                      <th style="width: 1%">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -53,7 +53,7 @@
                           (click)="toggleRoleRevocation(role)"
                         >
                           <i class="fas" [ngClass]="isRoleWaitingToBeRevoked(role) ? 'fa-undo' : 'fa-ban'"></i>
-                          {{ isRoleWaitingToBeRevoked(role) ? 'Undo Revoke' : 'Revoke Permission' }}
+                          {{ isRoleWaitingToBeRevoked(role) ? 'Undo Revoke' : 'Revoke Role' }}
                         </button>
                       </td>
                     </tr>
@@ -84,7 +84,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Scope</th>
-                      <th>Actions</th>
+                      <th style="width: 1%">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -127,7 +127,11 @@
               </button>
               <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
-                  <app-search-roles (roleUnchosen)="onRoleUnchosen($event)" (roleChosen)="onRoleChosen($event)"></app-search-roles>
+                  <app-search-roles
+                    (roleUnchosen)="onRoleUnchosen($event)"
+                    (roleChosen)="onRoleChosen($event)"
+                    [excludedRoles]="account.roles || []"
+                  />
                 </div>
               </div>
             </div>
@@ -142,10 +146,11 @@
               </button>
               <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
-                  <app-search-grant-role-permission
+                  <app-search-permissions
                     (permissionUnchosen)="onPermissionUnchosen($event)"
                     (permissionChosen)="onPermissionChosen($event)"
-                  ></app-search-grant-role-permission>
+                    [excludedPermissions]="account.permissions || []"
+                  ></app-search-permissions>
                 </div>
               </div>
             </div>
@@ -236,7 +241,7 @@
                 </div>
               </ng-template>
               <div class="mt-3 d-flex justify-content-end">
-                <button class="btn btn-outline-secondary mr-2" (click)="clearAuthoritiesCache()">
+                <button class="btn btn-outline-secondary mr-2" (click)="clearAuthoritiesCache()" [disabled]="!hasAuthoritiesCache()">
                   <i class="fas fa-trash-alt"></i>
                   Clear Cache
                 </button>

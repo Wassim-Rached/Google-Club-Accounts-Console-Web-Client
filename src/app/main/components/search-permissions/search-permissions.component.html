@@ -6,29 +6,35 @@
 
 <form class="card-body p-0 mt-2">
   <div class="input-group mb-3">
-    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-    <input type="text" class="form-control" placeholder="Search Roles..." #searchTerm (input)="refreshRoles(searchTerm.value)" />
+    <span class="input-group-text"><i class="fas fa-user-shield"></i></span>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search Permissions..."
+      #searchTerm
+      (input)="refreshPermissions(searchTerm.value)"
+    />
     <span class="input-group-text"><i class="fas fa-search"></i></span>
   </div>
-  <div *ngIf="roles; else loading">
+  <div *ngIf="permissions; else loading">
     <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let role of roles.content">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let permission of permissions.content">
         <div>
-          <i class="fas fa-user-lock"></i>
-          {{ role | rolePublicName }}
+          <i class="fas fa-key"></i>
+          {{ permission.scope + '.perm.' + permission.name }}
         </div>
         <div class="d-flex">
-          <ng-container *ngIf="isExcluded(role); else includeButton">
+          <ng-container *ngIf="isExcluded(permission); else includeButton">
             <button class="btn btn-secondary btn-sm btn-symmetric square-button" style="width: 40px; height: 40px" disabled>
               <i class="fas fa-ban"></i>
             </button>
           </ng-container>
           <ng-template #includeButton>
-            <ng-container *ngIf="!haveBeenChosen(role); else unchoseButton">
+            <ng-container *ngIf="!haveBeenChosen(permission); else unchoseButton">
               <button
                 class="btn btn-outline-success btn-sm btn-symmetric square-button"
                 style="width: 40px; height: 40px"
-                (click)="choseRole(role)"
+                (click)="chosePermission(permission)"
               >
                 <i class="fas fa-plus"></i>
               </button>
@@ -37,7 +43,7 @@
               <button
                 class="btn btn-danger btn-sm btn-symmetric square-button"
                 style="width: 40px; height: 40px"
-                (click)="unchoseRole(role)"
+                (click)="unchosePermission(permission)"
               >
                 <i class="fas fa-minus"></i>
               </button>

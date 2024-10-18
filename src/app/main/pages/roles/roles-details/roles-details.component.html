@@ -44,7 +44,7 @@
                       <th>#</th>
                       <th>Photo</th>
                       <th>Email</th>
-                      <th>Actions</th>
+                      <th style="width: 1%">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -95,7 +95,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Scope</th>
-                      <th>Actions</th>
+                      <th style="width: 1%">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -138,10 +138,11 @@
               </button>
               <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
-                  <app-search-account-grant-role
+                  <app-search-accounts
                     (accountUnchosen)="onAccountUnchosen($event)"
                     (accountChosen)="onAccountChosen($event)"
-                  ></app-search-account-grant-role>
+                    [excludedAccounts]="role.accounts || []"
+                  ></app-search-accounts>
                 </div>
               </div>
             </div>
@@ -156,10 +157,11 @@
               </button>
               <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
-                  <app-search-grant-role-permission
+                  <app-search-permissions
                     (permissionUnchosen)="onPermissionUnchosen($event)"
                     (permissionChosen)="onPermissionChosen($event)"
-                  ></app-search-grant-role-permission>
+                    [excludedPermissions]="role.permissions || []"
+                  ></app-search-permissions>
                 </div>
               </div>
             </div>
