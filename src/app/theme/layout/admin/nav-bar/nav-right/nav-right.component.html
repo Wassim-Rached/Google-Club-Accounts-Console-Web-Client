@@ -76,7 +76,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-end profile-notification" ngbDropdownMenu>
         <div class="pro-head">
-          <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image" />
+          <img [src]="account ? account.photoUrl : 'assets/images/user/avatar-1.jpg'" class="img-radius" alt="User-Profile-Image" />
           <span>{{ account ? account.email : 'loading@server.com' }}</span>
           <div class="dud-logout" title="Logout" (click)="logout()" style="cursor: pointer">
             <i class="feather icon-log-out"></i>
@@ -90,7 +90,7 @@
             </a>
           </li>
           <li>
-            <a href="javascript:" class="dropdown-item">
+            <a target="_blank" [href]="profileLink" class="dropdown-item">
               <i class="feather icon-user"></i>
               Profile
             </a>

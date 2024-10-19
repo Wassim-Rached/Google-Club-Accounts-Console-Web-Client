@@ -8,6 +8,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { SearchRolesComponent } from '../../../components/search-roles/search-roles.component';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-accounts-details',
@@ -31,7 +32,9 @@ export class AccountsDetailsComponent implements OnInit {
   toBeRevokedRoles: Role[] = [];
   isSavingChanges = false;
   isDeletingAccount = false;
-  isSuspendingAccount = false;
+  isLockingAccount = false;
+  isTogglingIdentityVerification = false;
+  isTogglingMembership = false;
   // authorities cache related properties
   authoritiesCache: { [scope: string]: string[] } | undefined;
   isLoadingAuthoritiesCache = false;
@@ -57,6 +60,7 @@ export class AccountsDetailsComponent implements OnInit {
         if (error.status === 404) {
           this.account = null;
         }
+        this.toastrService.error('Account not found');
         console.error(error);
       }
     });
@@ -189,8 +193,22 @@ export class AccountsDetailsComponent implements OnInit {
     alert('Not implemented yet');
   }
 
-  suspendAccount() {
-    alert('Not implemented yet');
+  lockAccount() {
+    this.isLockingAccount = true;
+    const accountId = this.route.snapshot.params['id'];
+    const lock = !this.account.isLocked;
+    this.accountsService.toggleAccountLock(accountId, lock).subscribe({
+      next: () => {
+        this.toastrService.success('Account locked successfully');
+        this.account.isLocked = lock;
+        this.isLockingAccount = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.toastrService.error('Failed to lock account');
+        this.isLockingAccount = false;
+      }
+    });
   }
 
   // authorities cache related methods
@@ -199,7 +217,6 @@ export class AccountsDetailsComponent implements OnInit {
     this.isLoadingAuthoritiesCache = true;
     this.authService.getAuthoritiesCache(accountId).subscribe({
       next: (cache) => {
-        console.log(cache);
         this.isLoadingAuthoritiesCache = false;
         this.authoritiesCache = cache;
       },
@@ -233,5 +250,43 @@ export class AccountsDetailsComponent implements OnInit {
 
   hasAuthoritiesCache() {
     return this.authoritiesCache && this.authoritiesCacheKeys.length > 0;
+  }
+
+  toggleMembership() {
+    this.isTogglingMembership = true;
+    const accountId = this.route.snapshot.params['id'];
+    const join = !this.account.isMember;
+    this.accountsService.changeMembership(accountId, join).subscribe({
+      next: () => {
+        const message = join ? 'Account Joined' : 'Account Left';
+        this.toastrService.success(message);
+        this.isTogglingMembership = false;
+        this.account.isMember = join;
+      },
+      error: (error) => {
+        console.error(error);
+        this.toastrService.error('Failed to toggle membership');
+        this.isTogglingMembership = false;
+      }
+    });
+  }
+
+  toggleIdentityVerification() {
+    this.isTogglingIdentityVerification = true;
+    const accountId = this.route.snapshot.params['id'];
+    const verify = !this.account.isIdentityVerified;
+    this.accountsService.toggleIdentityVerification(accountId, verify).subscribe({
+      next: () => {
+        const message = verify ? 'Account Identity Verified' : 'Account Identity Unverified';
+        this.toastrService.success(message);
+        this.isTogglingIdentityVerification = false;
+        this.account.isIdentityVerified = verify;
+      },
+      error: (error) => {
+        console.error(error);
+        this.toastrService.error('Failed to toggle identity verification');
+        this.isTogglingIdentityVerification = false;
+      }
+    });
   }
 }

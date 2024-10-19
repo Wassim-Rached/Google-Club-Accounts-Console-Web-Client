@@ -36,6 +36,11 @@ export interface Account {
   photoUrl: string;
   roles?: Role[];
   permissions?: Permission[];
+  isEmailVerified: boolean;
+  isLocked: boolean;
+  isMember: boolean;
+  isIdentityVerified: boolean;
+  createdAt: string;
 }
 
 @Injectable({
@@ -57,16 +62,47 @@ export class AccountsService {
   }
 
   getMyAccount(): Observable<Account> {
-    return this.http.get<Account>(`${environment.ics}/api/accounts/me`);
+    return this.http.get<Account>(`${environment.ics}/api/accounts/me`).pipe(
+      map((account) => {
+        if (!account.photoUrl) {
+          account.photoUrl = environment.defaultPhotoUrl;
+        }
+        return account;
+      })
+    );
   }
 
   getAccountById(id: string): Observable<Account> {
-    return this.http.get<Account>(`${environment.ics}/api/accounts/${id}`);
+    return this.http.get<Account>(`${environment.ics}/api/accounts/${id}`).pipe(
+      map((account) => {
+        if (!account.photoUrl) {
+          account.photoUrl = environment.defaultPhotoUrl;
+        }
+        return account;
+      })
+    );
   }
 
   editAccount(body: AccountEditRequest): Observable<AccountEditResponse> {
     return this.http
       .post<AccountEditResponse[]>(`${environment.ics}/api/accounts/authorities`, [body])
       .pipe(map((response) => response[0]));
+  }
+  toggleIdentityVerification(id: string, verify: boolean): Observable<string> {
+    return this.http
+      .post(`${environment.ics}/api/accounts/${id}/identity-verification?verify=${verify}`, {}, { responseType: 'text' })
+      .pipe(map((response) => response as string));
+  }
+
+  toggleAccountLock(id: string, lock: boolean): Observable<string> {
+    return this.http
+      .post(`${environment.ics}/api/accounts/${id}/lock-account?lock=${lock}`, {}, { responseType: 'text' })
+      .pipe(map((response) => response as string));
+  }
+
+  changeMembership(id: string, member: boolean): Observable<string> {
+    return this.http
+      .post(`${environment.ics}/api/accounts/${id}/membership?member=${member}`, {}, { responseType: 'text' })
+      .pipe(map((response) => response as string));
   }
 }

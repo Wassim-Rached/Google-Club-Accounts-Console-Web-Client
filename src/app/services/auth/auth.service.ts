@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Account, AccountsService } from '../accounts/accounts.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 interface AccountCreds {
   email: string;
@@ -22,7 +24,9 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private accountsService: AccountsService
+    private accountsService: AccountsService,
+    private toastrService: ToastrService,
+    private router: Router
   ) {}
 
   refreshAccount(): void {
@@ -33,6 +37,9 @@ export class AuthService {
         },
         error: (error) => {
           console.error(error);
+          this.toastrService.error('Failed to fetch current account');
+          this.logout();
+          this.router.navigate(['/auth']);
         }
       });
     } else {
@@ -50,7 +57,7 @@ export class AuthService {
       catchError((error) => {
         console.error(error);
         this.logout();
-        return throwError(() => new Error('Invalid credentials'));
+        return throwError(error);
       })
     );
   }

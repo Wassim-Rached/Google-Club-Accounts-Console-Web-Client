@@ -10,8 +10,8 @@ const routes: Routes = [
         loadComponent: () => import('./auth-signin/auth-signin.component')
       },
       {
-        path: 'signup',
-        loadComponent: () => import('./auth-signup/auth-signup.component')
+        path: '**',
+        redirectTo: 'signin'
       }
     ]
   }

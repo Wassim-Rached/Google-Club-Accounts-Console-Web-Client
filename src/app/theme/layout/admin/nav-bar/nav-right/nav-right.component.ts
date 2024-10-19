@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Account } from 'src/app/services/accounts/accounts.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-nav-right',
@@ -26,5 +27,9 @@ export class NavRightComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/signin']);
+  }
+
+  get profileLink(): string {
+    return environment.amwc + '/profile/overview/me';
   }
 }

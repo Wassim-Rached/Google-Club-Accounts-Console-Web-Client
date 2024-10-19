@@ -7,8 +7,47 @@
     </div>
   </ng-template>
 
-  <app-card [cardTitle]="'Account Settings : ' + account?.email" [options]="false" blockClass="table-border-style">
+  <app-card cardTitle="Account Settings" [options]="false" blockClass="table-border-style">
     <div class="container mt-4" *ngIf="account; else loading">
+      <div class="d-flex align-items-center mb-4">
+        <img [src]="account.photoUrl" alt="Account Photo" class="rounded-circle" style="width: 50px; height: 50px; margin-right: 10px" />
+        <div>
+          <h5 class="mb-0 d-flex align-items-center">
+            {{ account.email }}
+            <i
+              *ngIf="account.isEmailVerified"
+              class="fas fa-check-circle text-success ml-2"
+              style="align-self: center; margin-left: 5px"
+              title="Email Verified"
+            ></i>
+            <i
+              *ngIf="account.isLocked"
+              class="fas fa-lock text-danger ml-2"
+              style="align-self: center; margin-left: 5px"
+              title="Account Locked"
+            ></i>
+            <i
+              *ngIf="account.isIdentityVerified"
+              class="fas fa-id-card text-primary ml-2"
+              style="align-self: center; margin-left: 5px"
+              title="Identity Verified"
+            ></i>
+            <i
+              [ngClass]="account.isMember ? 'fas fa-user-check text-success' : 'fas fa-user-times text-danger'"
+              style="align-self: center; margin-left: 5px"
+              [title]="account.isMember ? 'Member' : 'Non Member'"
+            ></i>
+          </h5>
+
+          <div class="text-muted mt-1">
+            <small>
+              <i class="fas fa-calendar-alt"></i>
+              Joined at: {{ account.createdAt | date: 'mediumDate' }}
+            </small>
+          </div>
+        </div>
+      </div>
+
       <app-card cardTitle="Owns Authorities" [options]="false" blockClass="table-border-style">
         <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
           <li class="nav-item" [ngbNavItem]="2">
@@ -160,49 +199,49 @@
       <app-card cardTitle="Pending Changes" [options]="false" blockClass="table-border-style">
         <div class="container mt-4">
           <div class="row">
-            <div class="col-md-6">
-              <h5 class="text-success">
+            <div class="col-md-6 mb-4">
+              <h6 class="text-success">
                 <i class="fas fa-plus-circle"></i>
                 Permissions to Grant to Role
-              </h5>
+              </h6>
               <ul class="list-group">
-                <li class="list-group-item" *ngIf="!permissionsToBeGranted.length">No permissions to be granted to role.</li>
+                <li class="list-group-item text-muted" *ngIf="!permissionsToBeGranted.length">None</li>
                 <li class="list-group-item text-success" *ngFor="let permission of permissionsToBeGranted">
                   {{ permission.scope + '.perm.' + permission.name }}
                 </li>
               </ul>
             </div>
-            <div class="col-md-6">
-              <h5 class="text-danger">
+            <div class="col-md-6 mb-4">
+              <h6 class="text-danger">
                 <i class="fas fa-minus-circle"></i>
                 Permissions to Revoke from Role
-              </h5>
+              </h6>
               <ul class="list-group">
-                <li class="list-group-item" *ngIf="!permissionsToBeRevoked.length">No permissions to be revoked from role.</li>
+                <li class="list-group-item text-muted" *ngIf="!permissionsToBeRevoked.length">None</li>
                 <li class="list-group-item text-danger" *ngFor="let permission of permissionsToBeRevoked">
                   {{ permission.scope + '.perm.' + permission.name }}
                 </li>
               </ul>
             </div>
           </div>
-          <div class="row mt-4">
-            <div class="col-md-6">
-              <h5 class="text-success">
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <h6 class="text-success">
                 <i class="fas fa-user-plus"></i>
                 Roles to Grant to Account
-              </h5>
+              </h6>
               <ul class="list-group">
-                <li class="list-group-item" *ngIf="!rolesToBeGranted.length">No roles to be granted to account.</li>
+                <li class="list-group-item text-muted" *ngIf="!rolesToBeGranted.length">None</li>
                 <li class="list-group-item text-success" *ngFor="let role of rolesToBeGranted">{{ role.scope + '.role.' + role.name }}</li>
               </ul>
             </div>
-            <div class="col-md-6">
-              <h5 class="text-danger">
+            <div class="col-md-6 mb-4">
+              <h6 class="text-danger">
                 <i class="fas fa-user-minus"></i>
                 Roles to Revoke from Account
-              </h5>
+              </h6>
               <ul class="list-group">
-                <li class="list-group-item" *ngIf="!rolesToBeRevoked.length">No roles to be revoked from account.</li>
+                <li class="list-group-item text-muted" *ngIf="!rolesToBeRevoked.length">None</li>
                 <li class="list-group-item text-danger" *ngFor="let role of rolesToBeRevoked">{{ role.scope + '.role.' + role.name }}</li>
               </ul>
             </div>
@@ -260,9 +299,24 @@
         <i class="fas" [ngClass]="isDeletingAccount ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
         Delete Account
       </button>
-      <button class="btn btn-outline-warning mr-2" (click)="suspendAccount()" [disabled]="!account || isSuspendingAccount">
-        <i class="fas" [ngClass]="isSuspendingAccount ? 'fa-spinner fa-spin' : 'fa-pause-circle'"></i>
-        Suspend Account
+      <button class="btn btn-outline-warning mr-2" (click)="lockAccount()" [disabled]="!account || isLockingAccount">
+        <i class="fas" [ngClass]="isLockingAccount ? 'fa-spinner fa-spin' : account?.isLocked ? 'fa-lock-open' : 'fa-lock'"></i>
+        {{ account?.isLocked ? 'Unlock Account' : 'Lock Account' }}
+      </button>
+      <button
+        class="btn btn-outline-info mr-2"
+        (click)="toggleIdentityVerification()"
+        [disabled]="!account || isTogglingIdentityVerification"
+      >
+        <i
+          class="fas"
+          [ngClass]="isTogglingIdentityVerification ? 'fa-spinner fa-spin' : account?.isIdentityVerified ? 'fa-id-card-alt' : 'fa-id-card'"
+        ></i>
+        {{ account?.isIdentityVerified ? 'Unverify Identity' : 'Verify Identity' }}
+      </button>
+      <button class="btn btn-outline-primary mr-2" (click)="toggleMembership()" [disabled]="!account || isTogglingMembership">
+        <i class="fas" [ngClass]="isTogglingMembership ? 'fa-spinner fa-spin' : account?.isMember ? 'fa-user-minus' : 'fa-user-plus'"></i>
+        {{ account?.isMember ? 'Remove Membership' : 'Make Member' }}
       </button>
       <button class="btn btn-success" [disabled]="!account || !hasChanges || isSavingChanges" (click)="saveChanges()">
         <i class="fas" [ngClass]="isSavingChanges ? 'fa-spinner fa-spin' : 'fa-save'"></i>

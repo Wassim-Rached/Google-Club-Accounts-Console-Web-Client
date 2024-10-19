@@ -96,6 +96,6 @@ export class BreadcrumbsComponent {
       }
     });
     this.navigationList = result;
-    // this.titleService.setTitle(title + ' | 'Accounts-console');
+    this.titleService.setTitle(title + ' | Accounts Console');
   }
 }

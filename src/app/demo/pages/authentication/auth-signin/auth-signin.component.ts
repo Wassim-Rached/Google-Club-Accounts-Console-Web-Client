@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-auth-signin',
@@ -19,7 +21,8 @@ export default class AuthSigninComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -37,14 +40,20 @@ export default class AuthSigninComponent implements OnInit {
     this.authService.login(this.formGroup.value).subscribe({
       next: (_) => {
         this.isSubmitting = false;
-
+        this.toastr.success('Logged in successfully');
         // redirect to 'redirect'
         this.router.navigate([this.redirect]);
       },
       error: (error) => {
-        console.error(error);
         this.isSubmitting = false;
+        const message = error.error.message || 'An error occurred';
+        this.toastr.error(message);
       }
     });
+  }
+
+  get signUpUrl(): string {
+    const currentUrl = this.router.url;
+    return environment.amwc + '/auth/signup?redirect=' + currentUrl;
   }
 }
