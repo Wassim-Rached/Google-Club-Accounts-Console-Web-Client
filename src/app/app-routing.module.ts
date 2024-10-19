@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import { RequireAuthGuard } from './guards/AuthGuard';
+import { RequireUnAuthGuard } from './guards/UnAuthGuard';
 
 const routes: Routes = [
   {
@@ -59,6 +60,7 @@ const routes: Routes = [
     children: [
       {
         path: 'auth',
+        canActivate: [RequireUnAuthGuard],
         loadChildren: () => import('./demo/pages/authentication/authentication.module').then((m) => m.AuthenticationModule)
       }
     ]
