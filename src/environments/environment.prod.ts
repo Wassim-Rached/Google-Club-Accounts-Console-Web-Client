@@ -5,5 +5,6 @@ export const environment = {
   production: true,
   cas: 'https://cas-server.azurewebsites.net',
   ics: 'https://ics-server.azurewebsites.net',
+  amwc: 'https://account-manager-eta.vercel.app',
   defaultPhotoUrl: 'assets/images/user/avatar-2.jpg'
 };
