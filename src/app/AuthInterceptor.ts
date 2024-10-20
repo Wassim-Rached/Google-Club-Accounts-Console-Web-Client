@@ -25,7 +25,10 @@ export const authInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, ne
       // Check if the error status is 403
       switch (error.status) {
         case 403:
-          toastrService.error('Insufficent permission');
+          // check if the request is not the login request
+          if (request.url !== `${environment.cas}/api/token`) {
+            toastrService.error('Insufficent permission');
+          }
           break;
         case 401:
           // check if the request is not the login request
