@@ -61,8 +61,8 @@ export class AccountsService {
     );
   }
 
-  getMyAccount(): Observable<Account> {
-    return this.http.get<Account>(`${environment.ics}/api/accounts/me`).pipe(
+  getMyAccount(isDetailed: boolean = false): Observable<Account> {
+    return this.http.get<Account>(`${environment.ics}/api/accounts/me?isDetailed=${isDetailed}`).pipe(
       map((account) => {
         if (!account.photoUrl) {
           account.photoUrl = environment.defaultPhotoUrl;
