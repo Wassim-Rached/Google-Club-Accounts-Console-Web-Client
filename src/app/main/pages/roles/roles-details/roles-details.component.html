@@ -53,7 +53,9 @@
                       <td>
                         <img [src]="account.photoUrl || defaultPhotoUrl" alt="photo" class="img-thumbnail" width="35" height="35" />
                       </td>
-                      <td>{{ account.email }}</td>
+                      <td>
+                        <a [routerLink]="['/accounts/details', account.id]">{{ account.email }}</a>
+                      </td>
                       <td>
                         <button
                           class="btn btn-sm"
