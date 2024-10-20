@@ -226,7 +226,7 @@
     <div class="mt-4 d-flex justify-content-end">
       <button class="btn btn-outline-danger mr-2" (click)="deleteRole()" [disabled]="!role || isDeletingRole">
         <i class="fas" [ngClass]="isDeletingRole ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
-        Delete Permission
+        Delete Role
       </button>
       <button class="btn btn-success" [disabled]="!role || !hasChanges || isSavingChanges" (click)="saveChanges()">
         <i class="fas" [ngClass]="isSavingChanges ? 'fa-spinner fa-spin' : 'fa-save'"></i>
