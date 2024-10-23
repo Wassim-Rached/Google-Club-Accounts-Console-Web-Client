@@ -65,7 +65,7 @@ export class RolesService {
   }
 
   deleteRole(id: string): Observable<Role> {
-    return this.http.delete<Role>(`${environment.ics}/api/roles/${id}`);
+    return this.http.delete<Role>(`${environment.ics}/api/roles/${id}`, { responseType: 'text' as 'json' });
   }
 
   editRole(body: RoleEditRequest): Observable<RoleEditResponse> {

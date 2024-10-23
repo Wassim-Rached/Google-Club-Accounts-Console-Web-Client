@@ -16,7 +16,7 @@
       <p class="mb-5">
         <em>
           "{{
-            permission.description
+            permission
               ? permission.description
               : 'This permission is mainly used for controlling access to the system when the user is logged in. It ensures that the user has the right to access the system and is used throughout the system.'
           }}"
@@ -98,7 +98,7 @@
       </div>
     </app-card>
     <!-- delete button -->
-    <div class="mt-4">
+    <div class="mt-4 d-flex justify-content-end">
       <button class="btn btn-outline-danger" (click)="deletePermission()" [disabled]="!permission">Delete Permission</button>
     </div>
   </app-card>

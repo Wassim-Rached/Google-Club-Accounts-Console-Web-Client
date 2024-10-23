@@ -174,7 +174,8 @@ export class AccountsDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
-        this.toastrService.error('Failed to save changes');
+        const errorMessage = error.error || 'Failed to save changes';
+        this.toastrService.error(errorMessage);
         this.isSavingChanges = false;
       }
     });

@@ -41,8 +41,8 @@ export class PermissionsService {
     return this.http.post<Permission>(`${environment.ics}/api/permissions`, permission);
   }
 
-  deletePermission(id: string): Observable<Permission> {
-    return this.http.delete<Permission>(`${environment.ics}/api/permissions/${id}`);
+  deletePermission(id: string): Observable<String> {
+    return this.http.delete<String>(`${environment.ics}/api/permissions/${id}`, { responseType: 'text' as 'json' });
   }
 
   public static getPermissionPublicName(permission: Permission) {

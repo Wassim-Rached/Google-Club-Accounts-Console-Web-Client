@@ -45,7 +45,11 @@ import { provideToastr } from 'ngx-toastr';
     ToggleFullScreenDirective
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SharedModule, BrowserAnimationsModule, ServicesModule],
-  providers: [NavigationItem, provideAnimations(), provideToastr({ positionClass: 'toast-bottom-right' })],
+  providers: [
+    NavigationItem,
+    provideAnimations(),
+    provideToastr({ positionClass: 'toast-bottom-right', timeOut: 5000, closeButton: true })
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

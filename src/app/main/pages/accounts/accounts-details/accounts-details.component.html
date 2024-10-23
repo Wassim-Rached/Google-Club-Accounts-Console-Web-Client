@@ -294,17 +294,28 @@
         </div>
       </app-card>
     </div>
-    <div class="mt-4 d-flex justify-content-end">
-      <button class="btn btn-outline-danger mr-2" (click)="deleteAccount()" [disabled]="!account || isDeletingAccount">
+    <div class="mt-4 d-flex flex-wrap justify-content-end gap-2">
+      <button
+        class="btn btn-outline-danger mb-2 flex-fill"
+        style="min-width: 170px"
+        (click)="deleteAccount()"
+        [disabled]="!account || isDeletingAccount"
+      >
         <i class="fas" [ngClass]="isDeletingAccount ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
         Delete Account
       </button>
-      <button class="btn btn-outline-warning mr-2" (click)="lockAccount()" [disabled]="!account || isLockingAccount">
+      <button
+        class="btn btn-outline-warning mb-2 flex-fill"
+        style="min-width: 170px"
+        (click)="lockAccount()"
+        [disabled]="!account || isLockingAccount"
+      >
         <i class="fas" [ngClass]="isLockingAccount ? 'fa-spinner fa-spin' : account?.isLocked ? 'fa-lock-open' : 'fa-lock'"></i>
         {{ account?.isLocked ? 'Unlock Account' : 'Lock Account' }}
       </button>
       <button
-        class="btn btn-outline-info mr-2"
+        class="btn btn-outline-info mb-2 flex-fill"
+        style="min-width: 170px"
         (click)="toggleIdentityVerification()"
         [disabled]="!account || isTogglingIdentityVerification"
       >
@@ -314,11 +325,21 @@
         ></i>
         {{ account?.isIdentityVerified ? 'Unverify Identity' : 'Verify Identity' }}
       </button>
-      <button class="btn btn-outline-primary mr-2" (click)="toggleMembership()" [disabled]="!account || isTogglingMembership">
+      <button
+        class="btn btn-outline-primary mb-2 flex-fill"
+        style="min-width: 170px"
+        (click)="toggleMembership()"
+        [disabled]="!account || isTogglingMembership"
+      >
         <i class="fas" [ngClass]="isTogglingMembership ? 'fa-spinner fa-spin' : account?.isMember ? 'fa-user-minus' : 'fa-user-plus'"></i>
         {{ account?.isMember ? 'Remove Membership' : 'Make Member' }}
       </button>
-      <button class="btn btn-success" [disabled]="!account || !hasChanges || isSavingChanges" (click)="saveChanges()">
+      <button
+        class="btn btn-success mb-2 flex-fill"
+        style="min-width: 170px"
+        [disabled]="!account || !hasChanges || isSavingChanges"
+        (click)="saveChanges()"
+      >
         <i class="fas" [ngClass]="isSavingChanges ? 'fa-spinner fa-spin' : 'fa-save'"></i>
         Save Changes
       </button>

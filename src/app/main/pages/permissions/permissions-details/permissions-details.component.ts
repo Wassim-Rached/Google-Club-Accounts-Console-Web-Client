@@ -52,8 +52,8 @@ export class PermissionsDetailsComponent implements OnInit {
           this.router.navigate(['/permissions']);
         },
         error: (error) => {
-          console.error(error);
-          this.toastrService.error('Failed to delete permission');
+          const errorMessage = error.error || 'Failed to delete permission';
+          this.toastrService.error(errorMessage);
         }
       });
     }

@@ -78,8 +78,10 @@ export class RolesDetailsComponent implements OnInit {
           this.router.navigate(['/roles']);
         },
         error: (error) => {
-          console.error(error);
-          this.toastrService.error('Failed to delete role');
+          console.log(error.error);
+          const errorMessage = error.error || 'Failed to delete role';
+          console.log(error);
+          this.toastrService.error(errorMessage);
           this.isDeletingRole = false;
         }
       });
@@ -194,7 +196,8 @@ export class RolesDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
-        this.toastrService.error('Failed to save changes');
+        const errorMessage = error.error || 'Failed to save changes';
+        this.toastrService.error(errorMessage);
         this.isSavingChanges = false;
       }
     });
