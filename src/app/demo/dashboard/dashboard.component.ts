@@ -18,15 +18,33 @@ import '../../../assets/charts/amchart/worldLow.js';
 
 import dataJson from 'src/fake-data/map_data';
 import mapColor from 'src/fake-data/map-color-data.json';
+import { Authorities, AuthoritiesDiagramComponent } from '../../main/components/authorities-diagram/authorities-diagram.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, AuthoritiesDiagramComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export default class DashboardComponent implements OnInit {
+  authorities: Authorities = {
+    email: '"wassim@gmail.com"',
+    permissions: [
+      { name: 'read', scope: 'global' },
+      { name: 'write', scope: 'global' }
+    ],
+    roles: [
+      {
+        name: 'admin',
+        scope: 'global',
+        permissions: [
+          { name: 'read', scope: 'global' },
+          { name: 'write', scope: 'global' }
+        ]
+      }
+    ]
+  };
   ngOnInit() {
     setTimeout(() => {
       const latlong = dataJson;

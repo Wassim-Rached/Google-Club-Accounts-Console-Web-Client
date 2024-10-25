@@ -9,11 +9,12 @@ import { SearchRolesComponent } from '../../../components/search-roles/search-ro
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/environments/environment';
+import { Authorities, AuthoritiesDiagramComponent } from '../../../components/authorities-diagram/authorities-diagram.component';
 
 @Component({
   selector: 'app-accounts-details',
   standalone: true,
-  imports: [SharedModule, RouterModule, SearchPermissionsComponent, SearchRolesComponent],
+  imports: [SharedModule, RouterModule, SearchPermissionsComponent, SearchRolesComponent, AuthoritiesDiagramComponent],
   templateUrl: './accounts-details.component.html',
   styleUrl: './accounts-details.component.scss'
 })
@@ -52,6 +53,7 @@ export class AccountsDetailsComponent implements OnInit {
 
   refreshAccount() {
     const accountId = this.route.snapshot.params['id'];
+    this.account = undefined;
     this.accountsService.getAccountById(accountId).subscribe({
       next: (account) => {
         this.account = account;
@@ -73,6 +75,14 @@ export class AccountsDetailsComponent implements OnInit {
     } else {
       this.toBeRevokedRoles.push(role);
     }
+  }
+
+  toggleRoleGrant(role: Role) {
+    // it accually allows to revoke role
+    // not a toggle
+    // used to call the child method to mimic
+    // him unchoosing the role
+    this.grantRolesChild.unchoseRole(role);
   }
 
   onRoleChosen(role: Role) {
@@ -110,6 +120,14 @@ export class AccountsDetailsComponent implements OnInit {
     } else {
       this.toBeRevokedPermissions.push(permission);
     }
+  }
+
+  togglePermissionGrant(permission: Permission) {
+    // it accually allows to revoke permission
+    // not a toggle
+    // used to call the child method to mimic
+    // him unchoosing the permission
+    this.grantPermissionsChild.unchosePermission(permission);
   }
 
   onPermissionChosen(permission: Permission) {
@@ -289,5 +307,31 @@ export class AccountsDetailsComponent implements OnInit {
         this.isTogglingIdentityVerification = false;
       }
     });
+  }
+
+  get diagramAuthorities(): Authorities {
+    const roles = this.account.roles.map((r): Authorities['roles'][0] => {
+      return {
+        name: r.name,
+        scope: r.scope,
+        permissions: r.permissions.map((p): Authorities['roles'][0]['permissions'][0] => {
+          return {
+            name: p.name,
+            scope: p.scope
+          };
+        })
+      };
+    });
+    const permissions = this.account.permissions.map((p): Authorities['permissions'][0] => {
+      return {
+        name: p.name,
+        scope: p.scope
+      };
+    });
+    return {
+      email: this.account.email,
+      roles: roles,
+      permissions: permissions
+    };
   }
 }

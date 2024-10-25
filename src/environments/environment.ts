@@ -8,8 +8,8 @@ export const environment = {
   appVersion: packageInfo.version,
   production: true,
   cas: 'https://cas-server.azurewebsites.net',
-  // ics: 'https://ics-server.azurewebsites.net',
-  ics: 'http://localhost:8080',
+  ics: 'https://ics-server.azurewebsites.net',
+  // ics: 'http://localhost:8080',
 
   // wc
   amwc: 'http://localhost:4200',

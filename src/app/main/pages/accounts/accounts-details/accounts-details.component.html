@@ -9,43 +9,56 @@
 
   <app-card cardTitle="Account Settings" [options]="false" blockClass="table-border-style">
     <div class="container mt-4" *ngIf="account; else loading">
-      <div class="d-flex align-items-center mb-4">
-        <img [src]="account.photoUrl" alt="Account Photo" class="rounded-circle" style="width: 50px; height: 50px; margin-right: 10px" />
-        <div>
-          <h5 class="mb-0 d-flex align-items-center">
-            {{ account.email }}
-            <i
-              *ngIf="account.isEmailVerified"
-              class="fas fa-check-circle text-success ml-2"
-              style="align-self: center; margin-left: 5px"
-              title="Email Verified"
-            ></i>
-            <i
-              *ngIf="account.isLocked"
-              class="fas fa-lock text-danger ml-2"
-              style="align-self: center; margin-left: 5px"
-              title="Account Locked"
-            ></i>
-            <i
-              *ngIf="account.isIdentityVerified"
-              class="fas fa-id-card text-primary ml-2"
-              style="align-self: center; margin-left: 5px"
-              title="Identity Verified"
-            ></i>
-            <i
-              [ngClass]="account.isMember ? 'fas fa-user-check text-success' : 'fas fa-user-times text-danger'"
-              style="align-self: center; margin-left: 5px"
-              [title]="account.isMember ? 'Member' : 'Non Member'"
-            ></i>
-          </h5>
-
-          <div class="text-muted mt-1">
-            <small>
-              <i class="fas fa-calendar-alt"></i>
-              Joined at: {{ account.createdAt | date: 'mediumDate' }}
-            </small>
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 p-3 bg-light rounded shadow-sm">
+        <div class="d-flex align-items-center mb-3 mb-md-0">
+          <img
+            [src]="account.photoUrl"
+            alt="Account Photo"
+            class="rounded-circle"
+            style="width: 60px; height: 60px; margin-right: 15px; border: 2px solid #ddd"
+          />
+          <div>
+            <h5 class="mb-0">
+              {{ account.email }}
+            </h5>
+            <div class="text-muted mt-1" style="font-size: 0.8em">
+              <small>
+                <i class="fas fa-calendar-alt me-1"></i>
+                Joined at: {{ account.createdAt | date: 'mediumDate' }}
+              </small>
+            </div>
+            <div class="d-flex flex-row align-items-center ml-2 mt-2">
+              <i
+                *ngIf="account.isEmailVerified"
+                class="fas fa-check-circle text-success"
+                title="Email Verified"
+                style="font-size: 1em; margin-left: 0.5rem"
+              ></i>
+              <i
+                *ngIf="account.isLocked"
+                class="fas fa-lock text-danger"
+                title="Account Locked"
+                style="font-size: 1em; margin-left: 0.5rem"
+              ></i>
+              <i
+                *ngIf="account.isIdentityVerified"
+                class="fas fa-id-card text-primary"
+                title="Identity Verified"
+                style="font-size: 1em; margin-left: 0.5rem"
+              ></i>
+              <i
+                [ngClass]="account.isMember ? 'fas fa-user-check text-success' : 'fas fa-user-times text-danger'"
+                [title]="account.isMember ? 'Member' : 'Non Member'"
+                style="font-size: 1em; margin-left: 0.5rem"
+              ></i>
+            </div>
           </div>
         </div>
+
+        <button class="btn btn-sm btn-outline-secondary d-flex align-items-center" (click)="refreshAccount()">
+          <i class="fas fa-sync-alt mr-2"></i>
+          <span>Refresh</span>
+        </button>
       </div>
 
       <app-card cardTitle="Owns Authorities" [options]="false" blockClass="table-border-style">
@@ -72,7 +85,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Scope</th>
-                      <th style="width: 1%">Actions</th>
+                      <th style="width: 1%">Revoke</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -92,7 +105,7 @@
                           (click)="toggleRoleRevocation(role)"
                         >
                           <i class="fas" [ngClass]="isRoleWaitingToBeRevoked(role) ? 'fa-undo' : 'fa-ban'"></i>
-                          {{ isRoleWaitingToBeRevoked(role) ? 'Undo Revoke' : 'Revoke Role' }}
+                          {{ isRoleWaitingToBeRevoked(role) ? 'Undo' : 'Revoke' }}
                         </button>
                       </td>
                     </tr>
@@ -101,6 +114,7 @@
               </div>
             </ng-template>
           </li>
+
           <li class="nav-item" [ngbNavItem]="1">
             <a class="nav-link text-uppercase" aria-controls="permissions" aria-selected="true" ngbNavLink>
               <i class="fas fa-key"></i>
@@ -123,7 +137,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Scope</th>
-                      <th style="width: 1%">Actions</th>
+                      <th style="width: 1%">Revoke</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -143,13 +157,22 @@
                           (click)="togglePermissionRevocation(permission)"
                         >
                           <i class="fas" [ngClass]="isPermissionWaitingToBeRevoked(permission) ? 'fa-undo' : 'fa-ban'"></i>
-                          {{ isPermissionWaitingToBeRevoked(permission) ? 'Undo Revoke' : 'Revoke Permission' }}
+                          {{ isPermissionWaitingToBeRevoked(permission) ? 'Undo' : 'Revoke' }}
                         </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="3">
+            <a class="nav-link text-uppercase" aria-controls="visualization" aria-selected="true" ngbNavLink>
+              <i class="fas fa-chart-bar"></i>
+              Visualization
+            </a>
+            <ng-template ngbNavContent>
+              <app-authorities-diagram [authorities]="diagramAuthorities" />
             </ng-template>
           </li>
         </ul>
@@ -206,8 +229,22 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!permissionsToBeGranted.length">None</li>
-                <li class="list-group-item text-success" *ngFor="let permission of permissionsToBeGranted">
+                <li
+                  class="list-group-item text-success d-flex justify-content-between align-items-center"
+                  *ngFor="let permission of permissionsToBeGranted"
+                >
                   {{ permission.scope + '.perm.' + permission.name }}
+                  <button
+                    class="btn btn-sm btn-outline-success d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-success': !isPermissionWaitingToBeGranted(permission),
+                      'btn-secondary': isPermissionWaitingToBeGranted(permission)
+                    }"
+                    (click)="togglePermissionGrant(permission)"
+                  >
+                    <i class="fas" [ngClass]="isPermissionWaitingToBeGranted(permission) ? 'fa-undo' : 'fa-plus'"></i>
+                    <span class="ml-1">{{ isPermissionWaitingToBeGranted(permission) ? 'Undo' : 'Grant' }}</span>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -218,8 +255,22 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!permissionsToBeRevoked.length">None</li>
-                <li class="list-group-item text-danger" *ngFor="let permission of permissionsToBeRevoked">
+                <li
+                  class="list-group-item text-danger d-flex justify-content-between align-items-center"
+                  *ngFor="let permission of permissionsToBeRevoked"
+                >
                   {{ permission.scope + '.perm.' + permission.name }}
+                  <button
+                    class="btn btn-sm btn-outline-danger d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-danger': !isPermissionWaitingToBeRevoked(permission),
+                      'btn-secondary': isPermissionWaitingToBeRevoked(permission)
+                    }"
+                    (click)="togglePermissionRevocation(permission)"
+                  >
+                    <i class="fas" [ngClass]="isPermissionWaitingToBeRevoked(permission) ? 'fa-undo' : 'fa-ban'"></i>
+                    <span class="ml-1">{{ isPermissionWaitingToBeRevoked(permission) ? 'Undo' : 'Revoke' }}</span>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -232,7 +283,23 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!rolesToBeGranted.length">None</li>
-                <li class="list-group-item text-success" *ngFor="let role of rolesToBeGranted">{{ role.scope + '.role.' + role.name }}</li>
+                <li
+                  class="list-group-item text-success d-flex justify-content-between align-items-center"
+                  *ngFor="let role of rolesToBeGranted"
+                >
+                  {{ role.scope + '.role.' + role.name }}
+                  <button
+                    class="btn btn-sm btn-outline-success d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-success': !isRoleWaitingToBeGranted(role),
+                      'btn-secondary': isRoleWaitingToBeGranted(role)
+                    }"
+                    (click)="toggleRoleGrant(role)"
+                  >
+                    <i class="fas" [ngClass]="isRoleWaitingToBeGranted(role) ? 'fa-undo' : 'fa-plus'"></i>
+                    <span class="ml-1">{{ isRoleWaitingToBeGranted(role) ? 'Undo' : 'Grant' }}</span>
+                  </button>
+                </li>
               </ul>
             </div>
             <div class="col-md-6 mb-4">
@@ -242,7 +309,23 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!rolesToBeRevoked.length">None</li>
-                <li class="list-group-item text-danger" *ngFor="let role of rolesToBeRevoked">{{ role.scope + '.role.' + role.name }}</li>
+                <li
+                  class="list-group-item text-danger d-flex justify-content-between align-items-center"
+                  *ngFor="let role of rolesToBeRevoked"
+                >
+                  {{ role.scope + '.role.' + role.name }}
+                  <button
+                    class="btn btn-sm btn-outline-danger d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-danger': !isRoleWaitingToBeRevoked(role),
+                      'btn-secondary': isRoleWaitingToBeRevoked(role)
+                    }"
+                    (click)="toggleRoleRevocation(role)"
+                  >
+                    <i class="fas" [ngClass]="isRoleWaitingToBeRevoked(role) ? 'fa-undo' : 'fa-ban'"></i>
+                    <span class="ml-1">{{ isRoleWaitingToBeRevoked(role) ? 'Undo' : 'Revoke' }}</span>
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -295,7 +378,7 @@
       </app-card>
     </div>
     <div class="mt-4 d-flex flex-wrap justify-content-end gap-2">
-      <button
+      <!-- <button
         class="btn btn-outline-danger mb-2 flex-fill"
         style="min-width: 170px"
         (click)="deleteAccount()"
@@ -303,7 +386,7 @@
       >
         <i class="fas" [ngClass]="isDeletingAccount ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
         Delete Account
-      </button>
+      </button> -->
       <button
         class="btn btn-outline-warning mb-2 flex-fill"
         style="min-width: 170px"
