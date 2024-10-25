@@ -44,7 +44,7 @@
                       <th>#</th>
                       <th>Photo</th>
                       <th>Email</th>
-                      <th style="width: 1%">Actions</th>
+                      <th style="width: 1%">Revoke</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -66,7 +66,7 @@
                           (click)="toggleAccountRevocation(account)"
                         >
                           <i class="fas" [ngClass]="isAccountWaitingToBeRevoked(account) ? 'fa-undo' : 'fa-ban'"></i>
-                          {{ isAccountWaitingToBeRevoked(account) ? 'Undo Revoke' : 'Revoke Role' }}
+                          {{ isAccountWaitingToBeRevoked(account) ? 'Undo Revoke' : 'Revoke' }}
                         </button>
                       </td>
                     </tr>
@@ -97,7 +97,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Scope</th>
-                      <th style="width: 1%">Actions</th>
+                      <th style="width: 1%">Revoke</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -117,7 +117,7 @@
                           (click)="togglePermissionRevocation(permission)"
                         >
                           <i class="fas" [ngClass]="isPermissionWaitingToBeRevoked(permission) ? 'fa-undo' : 'fa-ban'"></i>
-                          {{ isPermissionWaitingToBeRevoked(permission) ? 'Undo Revoke' : 'Revoke Permission' }}
+                          {{ isPermissionWaitingToBeRevoked(permission) ? 'Undo Revoke' : 'Revoke' }}
                         </button>
                       </td>
                     </tr>
@@ -180,8 +180,22 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!permissionsToBeGranted.length">None</li>
-                <li class="list-group-item text-success" *ngFor="let permission of permissionsToBeGranted">
+                <li
+                  class="list-group-item text-success d-flex justify-content-between align-items-center"
+                  *ngFor="let permission of permissionsToBeGranted"
+                >
                   {{ permission.scope + '.perm.' + permission.name }}
+                  <button
+                    class="btn btn-sm btn-outline-success d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-success': !isPermissionWaitingToBeGranted(permission),
+                      'btn-secondary': isPermissionWaitingToBeGranted(permission)
+                    }"
+                    (click)="togglePermissionGrant(permission)"
+                  >
+                    <i class="fas" [ngClass]="isPermissionWaitingToBeGranted(permission) ? 'fa-undo' : 'fa-plus'"></i>
+                    <span class="ml-1">{{ isPermissionWaitingToBeGranted(permission) ? 'Undo' : 'Grant' }}</span>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -192,8 +206,22 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!permissionsToBeRevoked.length">None</li>
-                <li class="list-group-item text-danger" *ngFor="let permission of permissionsToBeRevoked">
+                <li
+                  class="list-group-item text-danger d-flex justify-content-between align-items-center"
+                  *ngFor="let permission of permissionsToBeRevoked"
+                >
                   {{ permission.scope + '.perm.' + permission.name }}
+                  <button
+                    class="btn btn-sm btn-outline-danger d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-danger': !isPermissionWaitingToBeRevoked(permission),
+                      'btn-secondary': isPermissionWaitingToBeRevoked(permission)
+                    }"
+                    (click)="togglePermissionRevocation(permission)"
+                  >
+                    <i class="fas" [ngClass]="isPermissionWaitingToBeRevoked(permission) ? 'fa-undo' : 'fa-ban'"></i>
+                    <span class="ml-1">{{ isPermissionWaitingToBeRevoked(permission) ? 'Undo' : 'Revoke' }}</span>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -206,7 +234,23 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!accountsToBeGranted.length">None</li>
-                <li class="list-group-item text-success" *ngFor="let account of accountsToBeGranted">{{ account.email }}</li>
+                <li
+                  class="list-group-item text-success d-flex justify-content-between align-items-center"
+                  *ngFor="let account of accountsToBeGranted"
+                >
+                  {{ account.email }}
+                  <button
+                    class="btn btn-sm btn-outline-success d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-success': !isAccountWaitingToBeGranted(account),
+                      'btn-secondary': isAccountWaitingToBeGranted(account)
+                    }"
+                    (click)="toggleAccountGrant(account)"
+                  >
+                    <i class="fas" [ngClass]="isAccountWaitingToBeGranted(account) ? 'fa-undo' : 'fa-plus'"></i>
+                    <span class="ml-1">{{ isAccountWaitingToBeGranted(account) ? 'Undo' : 'Grant' }}</span>
+                  </button>
+                </li>
               </ul>
             </div>
             <div class="col-md-6 mb-4">
@@ -216,7 +260,23 @@
               </h6>
               <ul class="list-group">
                 <li class="list-group-item text-muted" *ngIf="!accountsToBeRevoked.length">None</li>
-                <li class="list-group-item text-danger" *ngFor="let account of accountsToBeRevoked">{{ account.email }}</li>
+                <li
+                  class="list-group-item text-danger d-flex justify-content-between align-items-center"
+                  *ngFor="let account of accountsToBeRevoked"
+                >
+                  {{ account.email }}
+                  <button
+                    class="btn btn-sm btn-outline-danger d-flex align-items-center p-1"
+                    [ngClass]="{
+                      'btn-danger': !isAccountWaitingToBeRevoked(account),
+                      'btn-secondary': isAccountWaitingToBeRevoked(account)
+                    }"
+                    (click)="toggleAccountRevocation(account)"
+                  >
+                    <i class="fas" [ngClass]="isAccountWaitingToBeRevoked(account) ? 'fa-undo' : 'fa-ban'"></i>
+                    <span class="ml-1">{{ isAccountWaitingToBeRevoked(account) ? 'Undo' : 'Revoke' }}</span>
+                  </button>
+                </li>
               </ul>
             </div>
           </div>

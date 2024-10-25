@@ -101,99 +101,99 @@ const NavigationItems = [
         icon: 'feather icon-shield'
       }
     ]
-  },
-  {
-    id: 'ui-element',
-    title: 'UI ELEMENT',
-    type: 'group',
-    icon: 'icon-ui',
-    children: [
-      {
-        id: 'basic',
-        title: 'Component',
-        type: 'collapse',
-        icon: 'feather icon-box',
-        children: [
-          {
-            id: 'button',
-            title: 'Button',
-            type: 'item',
-            url: '/basic/button'
-          },
-          {
-            id: 'badges',
-            title: 'Badges',
-            type: 'item',
-            url: '/basic/badges'
-          },
-          {
-            id: 'breadcrumb-pagination',
-            title: 'Breadcrumb & Pagination',
-            type: 'item',
-            url: '/basic/breadcrumb-paging'
-          },
-          {
-            id: 'collapse',
-            title: 'Collapse',
-            type: 'item',
-            url: '/basic/collapse'
-          },
-          {
-            id: 'tabs-pills',
-            title: 'Tabs & Pills',
-            type: 'item',
-            url: '/basic/tabs-pills'
-          },
-          {
-            id: 'typography',
-            title: 'Typography',
-            type: 'item',
-            url: '/basic/typography'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'forms',
-    title: 'Forms & Tables',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'forms-element',
-        title: 'Form Elements',
-        type: 'item',
-        url: '/forms/basic',
-        classes: 'nav-item',
-        icon: 'feather icon-file-text'
-      },
-      {
-        id: 'tables',
-        title: 'Tables',
-        type: 'item',
-        url: '/tables/bootstrap',
-        classes: 'nav-item',
-        icon: 'feather icon-server'
-      }
-    ]
-  },
-  {
-    id: 'chart-maps',
-    title: 'Chart',
-    type: 'group',
-    icon: 'icon-charts',
-    children: [
-      {
-        id: 'apexChart',
-        title: 'ApexChart',
-        type: 'item',
-        url: 'apexchart',
-        classes: 'nav-item',
-        icon: 'feather icon-pie-chart'
-      }
-    ]
   }
+  // {
+  //   id: 'ui-element',
+  //   title: 'UI ELEMENT',
+  //   type: 'group',
+  //   icon: 'icon-ui',
+  //   children: [
+  //     {
+  //       id: 'basic',
+  //       title: 'Component',
+  //       type: 'collapse',
+  //       icon: 'feather icon-box',
+  //       children: [
+  //         {
+  //           id: 'button',
+  //           title: 'Button',
+  //           type: 'item',
+  //           url: '/basic/button'
+  //         },
+  //         {
+  //           id: 'badges',
+  //           title: 'Badges',
+  //           type: 'item',
+  //           url: '/basic/badges'
+  //         },
+  //         {
+  //           id: 'breadcrumb-pagination',
+  //           title: 'Breadcrumb & Pagination',
+  //           type: 'item',
+  //           url: '/basic/breadcrumb-paging'
+  //         },
+  //         {
+  //           id: 'collapse',
+  //           title: 'Collapse',
+  //           type: 'item',
+  //           url: '/basic/collapse'
+  //         },
+  //         {
+  //           id: 'tabs-pills',
+  //           title: 'Tabs & Pills',
+  //           type: 'item',
+  //           url: '/basic/tabs-pills'
+  //         },
+  //         {
+  //           id: 'typography',
+  //           title: 'Typography',
+  //           type: 'item',
+  //           url: '/basic/typography'
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // },
+  // {
+  //   id: 'forms',
+  //   title: 'Forms & Tables',
+  //   type: 'group',
+  //   icon: 'icon-group',
+  //   children: [
+  //     {
+  //       id: 'forms-element',
+  //       title: 'Form Elements',
+  //       type: 'item',
+  //       url: '/forms/basic',
+  //       classes: 'nav-item',
+  //       icon: 'feather icon-file-text'
+  //     },
+  //     {
+  //       id: 'tables',
+  //       title: 'Tables',
+  //       type: 'item',
+  //       url: '/tables/bootstrap',
+  //       classes: 'nav-item',
+  //       icon: 'feather icon-server'
+  //     }
+  //   ]
+  // },
+  // {
+  //   id: 'chart-maps',
+  //   title: 'Chart',
+  //   type: 'group',
+  //   icon: 'icon-charts',
+  //   children: [
+  //     {
+  //       id: 'apexChart',
+  //       title: 'ApexChart',
+  //       type: 'item',
+  //       url: 'apexchart',
+  //       classes: 'nav-item',
+  //       icon: 'feather icon-pie-chart'
+  //     }
+  //   ]
+  // }
   // {
   //   id: 'pages',
   //   title: 'Pages',

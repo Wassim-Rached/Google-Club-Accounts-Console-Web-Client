@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Account } from 'src/app/services/accounts/accounts.service';
-import { Permission } from 'src/app/services/permissions.service';
+import { Permission, PermissionsService } from 'src/app/services/permissions.service';
 import { Role, RoleEditRequest, RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { environment } from 'src/environments/environment';
@@ -62,7 +62,7 @@ export class RolesDetailsComponent implements OnInit {
     const confirmation = confirm(
       'Are you sure you want to delete this role? All related relations with accounts and permissions for this role will be lost.'
     );
-    const rolePublicName = this.generateRolePublicName(this.role);
+    const rolePublicName = RolesService.getRolePublicName(this.role);
     const input = prompt('Type the role name to confirm deletion');
     if (input !== rolePublicName) {
       this.toastrService.error('Role name does not match');
@@ -95,6 +95,14 @@ export class RolesDetailsComponent implements OnInit {
     } else {
       this.toBeRevokedFromAccounts.push(account);
     }
+  }
+
+  toggleAccountGrant(account: Account) {
+    // it accually allows to revoke accounts
+    // not a toggle
+    // used to call the child method to mimic
+    // him unchoosing the role
+    this.grantAccountChild.unchoseaccount(account);
   }
 
   onAccountChosen(account: Account) {
@@ -132,6 +140,14 @@ export class RolesDetailsComponent implements OnInit {
     } else {
       this.toBeRevokedPermissions.push(permission);
     }
+  }
+
+  togglePermissionGrant(permission: Permission) {
+    // it accually allows to revoke permissions
+    // not a toggle
+    // used to call the child method to mimic
+    // him unchoosing the role
+    this.grantPermissionsChild.unchosePermission(permission);
   }
 
   onPermissionChosen(permission: Permission) {
@@ -175,10 +191,10 @@ export class RolesDetailsComponent implements OnInit {
   // submit changes
   saveChanges() {
     const body: RoleEditRequest = {
-      publicName: this.generateRolePublicName(this.role),
+      publicName: RolesService.getRolePublicName(this.role),
       permissions: {
-        grant: this.toBeGrantedPermissions.map((p) => this.generatePermissionPublicName(p)),
-        revoke: this.toBeRevokedPermissions.map((p) => this.generatePermissionPublicName(p))
+        grant: this.toBeGrantedPermissions.map((p) => PermissionsService.getPermissionPublicName(p)),
+        revoke: this.toBeRevokedPermissions.map((p) => RolesService.getRolePublicName(p))
       },
       accounts: {
         grant: this.toBeGrantedToAccounts.map((a) => a.email),
@@ -210,12 +226,5 @@ export class RolesDetailsComponent implements OnInit {
     this.toBeRevokedPermissions = [];
     this.toBeGrantedToAccounts = [];
     this.toBeRevokedFromAccounts = [];
-  }
-
-  generatePermissionPublicName(permission: Permission) {
-    return permission.scope + '.perm.' + permission.name;
-  }
-  generateRolePublicName(role: Role) {
-    return role.scope + '.role.' + role.name;
   }
 }

@@ -60,8 +60,8 @@ export class RolesService {
     return this.http.get<any>(`${environment.ics}/api/roles/${id}`);
   }
 
-  createRole(role: Role): Observable<Role> {
-    return this.http.post<Role>(`${environment.ics}/api/roles`, role);
+  createRole(role: Role): Observable<string> {
+    return this.http.post(`${environment.ics}/api/roles`, role).pipe(map((response) => response as string));
   }
 
   deleteRole(id: string): Observable<Role> {

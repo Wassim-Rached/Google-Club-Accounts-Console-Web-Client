@@ -25,6 +25,7 @@ import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
 import { ServicesModule } from './services/services.module';
 import { provideToastr } from 'ngx-toastr';
+import { MessageComponent } from './main/components/message/message.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,16 @@ import { provideToastr } from 'ngx-toastr';
     NavSearchComponent,
     ToggleFullScreenDirective
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SharedModule, BrowserAnimationsModule, ServicesModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    BrowserAnimationsModule,
+    ServicesModule,
+    MessageComponent
+  ],
   providers: [
     NavigationItem,
     provideAnimations(),

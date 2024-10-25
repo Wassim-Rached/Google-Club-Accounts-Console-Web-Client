@@ -65,34 +65,6 @@
         </button>
       </div>
 
-      <div class="container mt-4">
-        <div class="accordion mb-3" id="authoritiesAccordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingAuthorities">
-              <button
-                class="accordion-button"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseAuthorities"
-                aria-expanded="false"
-                aria-controls="collapseAuthorities"
-              >
-                <i class="fas fa-user-plus me-2"></i>
-                Visualize Authorities
-              </button>
-            </h2>
-            <div
-              id="collapseAuthorities"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingAuthorities"
-              data-bs-parent="#authoritiesAccordion"
-            >
-              <div class="accordion-body"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <app-card cardTitle="Owns Authorities" [options]="false" blockClass="table-border-style">
         <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
           <li class="nav-item" [ngbNavItem]="2">

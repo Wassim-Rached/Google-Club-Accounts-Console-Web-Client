@@ -44,6 +44,12 @@ export class PermissionsDetailsComponent implements OnInit {
     const confirmation = confirm(
       'Are you sure you want to delete this permission? All related relations with accounts and roles for this permission will be lost.'
     );
+    const permissionName = PermissionsService.getPermissionPublicName(this.permission);
+    const input = prompt('Type the permission name to confirm deletion');
+    if (input !== permissionName) {
+      this.toastrService.error('Permission name does not match');
+      return;
+    }
     if (confirmation) {
       const permissionId = this.route.snapshot.params['id'];
       this.permissionsService.deletePermission(permissionId).subscribe({

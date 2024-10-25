@@ -8,7 +8,6 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { SearchRolesComponent } from '../../../components/search-roles/search-roles.component';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { environment } from 'src/environments/environment';
 import { Authorities, AuthoritiesDiagramComponent } from '../../../components/authorities-diagram/authorities-diagram.component';
 
 @Component({
@@ -32,7 +31,6 @@ export class AccountsDetailsComponent implements OnInit {
   toBeGrantedRoles: Role[] = [];
   toBeRevokedRoles: Role[] = [];
   isSavingChanges = false;
-  isDeletingAccount = false;
   isLockingAccount = false;
   isTogglingIdentityVerification = false;
   isTogglingMembership = false;
@@ -206,10 +204,6 @@ export class AccountsDetailsComponent implements OnInit {
     this.toBeRevokedPermissions = [];
     this.toBeGrantedRoles = [];
     this.toBeRevokedRoles = [];
-  }
-
-  deleteAccount() {
-    alert('Not implemented yet');
   }
 
   lockAccount() {

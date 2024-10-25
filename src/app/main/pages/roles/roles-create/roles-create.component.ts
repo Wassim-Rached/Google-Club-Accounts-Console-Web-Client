@@ -6,6 +6,7 @@ import { SearchPermissionsComponent } from '../../../components/search-permissio
 import { Permission } from 'src/app/services/permissions.service';
 import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-roles-create',
@@ -27,7 +28,8 @@ export class RolesCreateComponent implements OnInit {
   constructor(
     private rolesService: RolesService,
     private fb: FormBuilder,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private messagesService: MessagesService
   ) {}
 
   ngOnInit(): void {
@@ -47,9 +49,20 @@ export class RolesCreateComponent implements OnInit {
     this.isSubmitting = true;
 
     this.rolesService.createRole(body).subscribe({
-      next: (_) => {
+      next: (id) => {
         this.toastrService.success('Role created successfully');
+        // const permissionDetailsPageLink = `/permissions/details/${id}`;
+        const roleDetailsPageLink = `/roles/details/${id}`;
         this.formGroup.reset();
+        this.messagesService.pushMessage({
+          type: 'success',
+          content: 'Role created successfully',
+          link: {
+            text: 'View Role',
+            url: roleDetailsPageLink,
+            type: 'internal'
+          }
+        });
         this.clearChosenPermissions();
         this.isSubmitting = false;
       },

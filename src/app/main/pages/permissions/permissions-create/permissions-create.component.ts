@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { MessagesService } from 'src/app/services/messages.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
@@ -18,7 +19,8 @@ export class PermissionsCreateComponent implements OnInit {
 
   constructor(
     private permissionsService: PermissionsService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private messagesService: MessagesService
   ) {}
 
   ngOnInit(): void {
@@ -37,14 +39,25 @@ export class PermissionsCreateComponent implements OnInit {
     this.isSubmitting = true;
 
     this.permissionsService.createPermission(body).subscribe({
-      next: (_) => {
+      next: (id) => {
         this.toastrService.success('Permission created successfully');
+        const permissionDetailsPageLink = `/permissions/details/${id}`;
+        this.messagesService.pushMessage({
+          type: 'success',
+          content: 'Permission created successfully',
+          link: {
+            text: 'View Permission',
+            url: permissionDetailsPageLink,
+            type: 'internal'
+          }
+        });
         this.formGroup.reset();
         this.isSubmitting = false;
       },
       error: (error) => {
         console.error(error);
-        this.toastrService.error('Failed to create permission');
+        const errorMessage = error.error || 'Failed to create permission';
+        this.toastrService.error(errorMessage);
         this.isSubmitting = false;
       }
     });

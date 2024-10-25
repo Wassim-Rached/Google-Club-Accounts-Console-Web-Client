@@ -1,21 +1,35 @@
 // angular import
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 // project import
 import { DattaConfig } from 'src/app/app-config';
+import { Message, MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
+  // messages
+  messages: Message[] = [];
+
+  ngOnInit(): void {
+    this.messagesService.messages$.subscribe((messages) => {
+      this.messages = messages;
+    });
+  }
+
+  // template code
   navCollapsed: any;
   navCollapsedMob: boolean;
   windowWidth: number;
 
-  constructor(private location: Location) {
+  constructor(
+    private location: Location,
+    private messagesService: MessagesService
+  ) {
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
       current_url = this.location['_baseHref'] + this.location.path();

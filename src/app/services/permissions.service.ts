@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Account } from './accounts/accounts.service';
 import { Role } from './roles/roles.service';
@@ -37,12 +37,12 @@ export class PermissionsService {
     return this.http.get<Permission>(`${environment.ics}/api/permissions/${id}`);
   }
 
-  createPermission(permission: Permission): Observable<Permission> {
-    return this.http.post<Permission>(`${environment.ics}/api/permissions`, permission);
+  createPermission(permission: Permission): Observable<string> {
+    return this.http.post(`${environment.ics}/api/permissions`, permission).pipe(map((response) => response as string));
   }
 
-  deletePermission(id: string): Observable<String> {
-    return this.http.delete<String>(`${environment.ics}/api/permissions/${id}`, { responseType: 'text' as 'json' });
+  deletePermission(id: string): Observable<string> {
+    return this.http.delete(`${environment.ics}/api/permissions/${id}`).pipe(map((response) => response as string));
   }
 
   public static getPermissionPublicName(permission: Permission) {

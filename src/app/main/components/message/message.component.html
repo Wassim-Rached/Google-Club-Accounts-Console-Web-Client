@@ -1,0 +1,19 @@
+<div
+  *ngIf="message"
+  [ngClass]="'alert alert-' + message.type"
+  role="alert"
+  style="display: flex; justify-content: space-between; align-items: center"
+>
+  <div>
+    <i *ngIf="message.type === 'success'" class="fa fa-check-circle icon-spacing"></i>
+    <i *ngIf="message.type === 'danger'" class="fa fa-times-circle icon-spacing"></i>
+    <i *ngIf="message.type === 'info'" class="fa fa-info-circle icon-spacing"></i>
+    <i *ngIf="message.type === 'warning'" class="fa fa-exclamation-circle icon-spacing"></i>
+    {{ message.content }}
+    <a *ngIf="message.link && message.link.type === 'external'" [href]="message.link.url" class="alert-link">{{ message.link.text }}</a>
+    <a *ngIf="message.link && message.link.type === 'internal'" [routerLink]="message.link.url" class="alert-link">
+      {{ message.link.text }}
+    </a>
+  </div>
+  <button type="button" class="btn-close" aria-label="Close" (click)="closeMessage()"></button>
+</div>
