@@ -7,6 +7,10 @@
     </div>
   </ng-template>
 
+  <ng-template #diagram>
+    <app-authorities-diagram [authorities]="diagramAuthorities" />
+  </ng-template>
+
   <app-card cardTitle="Account Settings" [options]="false" blockClass="table-border-style">
     <div class="container mt-4" *ngIf="account; else loading">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 p-3 bg-light rounded shadow-sm">
@@ -59,6 +63,34 @@
           <i class="fas fa-sync-alt mr-2"></i>
           <span>Refresh</span>
         </button>
+      </div>
+
+      <div class="container mt-4">
+        <div class="accordion mb-3" id="authoritiesAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAuthorities">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseAuthorities"
+                aria-expanded="false"
+                aria-controls="collapseAuthorities"
+              >
+                <i class="fas fa-user-plus me-2"></i>
+                Visualize Authorities
+              </button>
+            </h2>
+            <div
+              id="collapseAuthorities"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingAuthorities"
+              data-bs-parent="#authoritiesAccordion"
+            >
+              <div class="accordion-body"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <app-card cardTitle="Owns Authorities" [options]="false" blockClass="table-border-style">
@@ -166,13 +198,14 @@
               </div>
             </ng-template>
           </li>
+
           <li class="nav-item" [ngbNavItem]="3">
             <a class="nav-link text-uppercase" aria-controls="visualization" aria-selected="true" ngbNavLink>
-              <i class="fas fa-chart-bar"></i>
+              <i class="fas fa-chart-pie"></i>
               Visualization
             </a>
             <ng-template ngbNavContent>
-              <app-authorities-diagram [authorities]="diagramAuthorities" />
+              <ng-container *ngTemplateOutlet="diagram"></ng-container>
             </ng-template>
           </li>
         </ul>
@@ -378,15 +411,6 @@
       </app-card>
     </div>
     <div class="mt-4 d-flex flex-wrap justify-content-end gap-2">
-      <!-- <button
-        class="btn btn-outline-danger mb-2 flex-fill"
-        style="min-width: 170px"
-        (click)="deleteAccount()"
-        [disabled]="!account || isDeletingAccount"
-      >
-        <i class="fas" [ngClass]="isDeletingAccount ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
-        Delete Account
-      </button> -->
       <button
         class="btn btn-outline-warning mb-2 flex-fill"
         style="min-width: 170px"

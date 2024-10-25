@@ -28,23 +28,6 @@ import { Authorities, AuthoritiesDiagramComponent } from '../../main/components/
   styleUrls: ['./dashboard.component.scss']
 })
 export default class DashboardComponent implements OnInit {
-  authorities: Authorities = {
-    email: '"wassim@gmail.com"',
-    permissions: [
-      { name: 'read', scope: 'global' },
-      { name: 'write', scope: 'global' }
-    ],
-    roles: [
-      {
-        name: 'admin',
-        scope: 'global',
-        permissions: [
-          { name: 'read', scope: 'global' },
-          { name: 'write', scope: 'global' }
-        ]
-      }
-    ]
-  };
   ngOnInit() {
     setTimeout(() => {
       const latlong = dataJson;

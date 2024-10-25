@@ -38,14 +38,55 @@ export class AuthoritiesDiagramComponent implements AfterViewInit {
     const diagram = this.generateMermaidDiagram(this.authorities);
     this.diagramView.nativeElement.innerHTML = diagram;
 
-    // Initialize mermaid with basic configuration
-    mermaid.initialize({ startOnLoad: false });
-    mermaid.init(undefined, this.diagramView.nativeElement);
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#ffcc00',
+        primaryTextColor: '#000000',
+        primaryBorderColor: '#333333',
+        lineColor: '#333333',
+        secondaryColor: '#ADD8E6',
+        tertiaryColor: '#FFD700',
+        tertiaryTextColor: '#000000',
+        tertiaryBorderColor: '#333333'
+      },
+      flowchart: {
+        curve: 'basis'
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35,
+        mirrorActors: true,
+        width: 150,
+        height: 65,
+        useMaxWidth: true
+      },
+      gantt: {
+        axisFormat: '%m/%d/%Y',
+        barHeight: 20,
+        barGap: 4,
+        topPadding: 50,
+        leftPadding: 75,
+        rightPadding: 75,
+        gridLineStartPadding: 35,
+        fontSize: 11,
+        numberSectionStyles: 4
+      }
+    });
+    mermaid.render('diagram', this.generateMermaidDiagram(this.authorities)).then((e) => {
+      this.diagramView.nativeElement.innerHTML = e.svg;
+    });
   }
+
+  manualRender() {}
 
   generateMermaidDiagram(authorities: Authorities): string {
     const email = authorities.email;
-    let diagram = 'graph TD\n  user["' + email + '"]\n';
+    let diagram = 'graph LR\n  user["' + email + '"]\n';
 
     const scopeGroups: { [key: string]: string[] } = {}; // Group roles/permissions by scope
 
@@ -94,7 +135,6 @@ export class AuthoritiesDiagramComponent implements AfterViewInit {
       diagram += `  end\n`;
     });
 
-    console.log(diagram);
     return diagram;
   }
 }
