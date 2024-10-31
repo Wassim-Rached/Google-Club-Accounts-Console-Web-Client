@@ -75,6 +75,14 @@ const NavigationItems = [
         url: '/roles/create',
         classes: 'nav-item',
         icon: 'feather icon-user-plus'
+      },
+      {
+        id: 'import',
+        title: 'Import Roles',
+        type: 'item',
+        url: '/roles/import',
+        classes: 'nav-item',
+        icon: 'feather icon-upload'
       }
     ]
   },

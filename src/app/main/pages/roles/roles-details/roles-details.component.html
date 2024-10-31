@@ -293,6 +293,10 @@
         <i class="fas" [ngClass]="isDeletingRole ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
         Delete Role
       </button>
+      <button class="btn btn-primary mb-2 flex-fill" style="min-width: 170px" [disabled]="!role" (click)="downloadRoleJson()">
+        <i class="fas fa-file-export"></i>
+        Export Role
+      </button>
       <button
         class="btn btn-success mb-2 flex-fill"
         style="min-width: 170px"

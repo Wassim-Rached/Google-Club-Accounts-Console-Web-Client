@@ -2,9 +2,23 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Permission } from '../permissions.service';
+import { Permission, PermissionImportRequest, PermissionImportResponse, PermissionsService } from '../permissions.service';
 import { Account } from '../accounts/accounts.service';
 import { Page } from 'src/types';
+
+export interface RoleImportRequest {
+  name: string;
+  scope: string;
+  description: string;
+  permissions: PermissionImportRequest[];
+}
+
+export interface RoleImportResponse {
+  rolePublicName: string;
+  status: 'created' | 'skipped';
+  permissions: PermissionImportResponse[];
+}
+
 export interface RoleEditResponse {
   rolePublicName: string;
   permissions: {
@@ -72,7 +86,24 @@ export class RolesService {
     return this.http.post<RoleEditResponse[]>(`${environment.ics}/api/roles/edit`, [body]).pipe(map((responses) => responses[0]));
   }
 
+  importRoles(body: RoleImportRequest[]): Observable<RoleImportResponse[]> {
+    return this.http.post<RoleImportResponse[]>(`${environment.ics}/api/roles/import`, body);
+  }
+
   public static getRolePublicName(role: Role) {
     return role.scope + '.role.' + role.name;
+  }
+
+  public static generateRoleExportObject(role: Role): object {
+    return {
+      name: role.name,
+      scope: role.scope,
+      description: role.description,
+      permissions: role.permissions?.map(PermissionsService.generatePermissionExportObject)
+    };
+  }
+
+  public static generateRoleExportJson(role: Role): string {
+    return JSON.stringify(this.generateRoleExportObject(role));
   }
 }

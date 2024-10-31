@@ -15,8 +15,8 @@ export const environment = {
   // cas: 'http://localhost:3001',
 
   // identity and access control service
-  ics: 'https://ics-server.azurewebsites.net',
-  // ics: 'http://localhost:8080',
+  // ics: 'https://ics-server.azurewebsites.net',
+  ics: 'http://localhost:8080',
 
   // wc
   amwc: 'https://account-manager-eta.vercel.app',

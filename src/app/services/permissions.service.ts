@@ -15,6 +15,17 @@ export interface Permission {
   accounts?: Account[];
 }
 
+export interface PermissionImportRequest {
+  name: string;
+  scope: string;
+  description: string;
+}
+
+export interface PermissionImportResponse {
+  permissionPublicName: string;
+  status: 'created' | 'skipped';
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -47,5 +58,17 @@ export class PermissionsService {
 
   public static getPermissionPublicName(permission: Permission) {
     return permission.scope + '.perm.' + permission.name;
+  }
+
+  public static generatePermissionExportObject(permission: Permission): object {
+    return {
+      name: permission.name,
+      scope: permission.scope,
+      description: permission.description
+    };
+  }
+
+  public static generatePermissionExportJson(permission: Permission): string {
+    return JSON.stringify(this.generatePermissionExportObject(permission));
   }
 }

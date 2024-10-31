@@ -45,6 +45,7 @@ export class RolesDetailsComponent implements OnInit {
 
   refreshRole() {
     const roleId = this.route.snapshot.params['id'];
+    this.role = undefined;
     this.rolesService.getRoleById(roleId).subscribe({
       next: (role) => {
         this.role = role;
@@ -62,30 +63,29 @@ export class RolesDetailsComponent implements OnInit {
     const confirmation = confirm(
       'Are you sure you want to delete this role? All related relations with accounts and permissions for this role will be lost.'
     );
+    if (!confirmation) return;
     const rolePublicName = RolesService.getRolePublicName(this.role);
     const input = prompt('Type the role name to confirm deletion');
     if (input !== rolePublicName) {
       this.toastrService.error('Role name does not match');
       return;
     }
-    if (confirmation) {
-      const roleId = this.route.snapshot.params['id'];
-      this.isDeletingRole = true;
-      this.rolesService.deleteRole(roleId).subscribe({
-        next: () => {
-          this.toastrService.success('Role deleted successfully');
-          this.isDeletingRole = false;
-          this.router.navigate(['/roles']);
-        },
-        error: (error) => {
-          console.log(error.error);
-          const errorMessage = error.error || 'Failed to delete role';
-          console.log(error);
-          this.toastrService.error(errorMessage);
-          this.isDeletingRole = false;
-        }
-      });
-    }
+    const roleId = this.route.snapshot.params['id'];
+    this.isDeletingRole = true;
+    this.rolesService.deleteRole(roleId).subscribe({
+      next: () => {
+        this.toastrService.success('Role deleted successfully');
+        this.isDeletingRole = false;
+        this.router.navigate(['/roles']);
+      },
+      error: (error) => {
+        console.log(error.error);
+        const errorMessage = error.error || 'Failed to delete role';
+        console.log(error);
+        this.toastrService.error(errorMessage);
+        this.isDeletingRole = false;
+      }
+    });
   }
 
   // account related methods
@@ -226,5 +226,16 @@ export class RolesDetailsComponent implements OnInit {
     this.toBeRevokedPermissions = [];
     this.toBeGrantedToAccounts = [];
     this.toBeRevokedFromAccounts = [];
+  }
+
+  downloadRoleJson() {
+    const roleJson = RolesService.generateRoleExportJson(this.role);
+    const blob = new Blob([roleJson], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${this.role.name}.json`;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }

@@ -25,6 +25,7 @@ export class AccountsDetailsComponent implements OnInit {
   grantRolesChild: SearchRolesComponent;
 
   account?: Account;
+  diagramAuthorities: Authorities | undefined;
   // save changes related properties
   toBeGrantedPermissions: Permission[] = [];
   toBeRevokedPermissions: Permission[] = [];
@@ -55,6 +56,7 @@ export class AccountsDetailsComponent implements OnInit {
     this.accountsService.getAccountById(accountId).subscribe({
       next: (account) => {
         this.account = account;
+        this.diagramAuthorities = this.getDiagramAuthorities();
       },
       error: (error) => {
         if (error.status === 404) {
@@ -303,7 +305,7 @@ export class AccountsDetailsComponent implements OnInit {
     });
   }
 
-  get diagramAuthorities(): Authorities {
+  getDiagramAuthorities(): Authorities {
     const roles = this.account.roles.map((r): Authorities['roles'][0] => {
       return {
         name: r.name,

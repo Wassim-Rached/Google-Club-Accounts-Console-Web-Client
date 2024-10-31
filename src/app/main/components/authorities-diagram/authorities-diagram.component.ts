@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, AfterViewInit, ViewChild, OnChanges } from '@angular/core';
 import mermaid from 'mermaid';
 
 export interface Authorities {
@@ -24,20 +24,27 @@ interface AuthorityPermission {
   templateUrl: './authorities-diagram.component.html',
   styleUrls: ['./authorities-diagram.component.scss']
 })
-export class AuthoritiesDiagramComponent implements AfterViewInit {
+export class AuthoritiesDiagramComponent implements AfterViewInit, OnChanges {
   @Input({ required: true }) authorities!: Authorities;
   @ViewChild('diagram', { static: true }) diagramView!: ElementRef;
+  haveBeenRendered = false;
 
   constructor() {}
 
   ngAfterViewInit(): void {
     this.renderDiagram();
+    this.haveBeenRendered = true;
+  }
+
+  ngOnChanges(): void {
+    if (this.haveBeenRendered) {
+      mermaid.render('diagram', this.generateMermaidDiagram(this.authorities)).then((e) => {
+        this.diagramView.nativeElement.innerHTML = e.svg;
+      });
+    }
   }
 
   renderDiagram() {
-    const diagram = this.generateMermaidDiagram(this.authorities);
-    this.diagramView.nativeElement.innerHTML = diagram;
-
     mermaid.initialize({
       startOnLoad: false,
       theme: 'default',
