@@ -33,6 +33,10 @@ const routes: Routes = [
         loadChildren: () => import('./main/pages/permissions/permissions.module').then((m) => m.PermissionsModule)
       },
       {
+        path: 'apps',
+        loadChildren: () => import('./main/pages/apps/apps.module').then((m) => m.AppsModule)
+      },
+      {
         path: 'basic',
         loadChildren: () => import('./demo/ui-elements/ui-basic/ui-basic.module').then((m) => m.UiBasicModule)
       },

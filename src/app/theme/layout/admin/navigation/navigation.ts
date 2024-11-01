@@ -109,6 +109,23 @@ const NavigationItems = [
         icon: 'feather icon-shield'
       }
     ]
+  },
+  // apps  which will have -> authorities
+  {
+    id: 'apps',
+    title: 'Apps',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: 'authorities',
+        title: 'Authorities',
+        type: 'item',
+        url: '/apps/authorities',
+        classes: 'nav-item',
+        icon: 'feather icon-shield'
+      }
+    ]
   }
   // {
   //   id: 'ui-element',

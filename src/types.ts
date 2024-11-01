@@ -15,11 +15,18 @@ export interface Page<T> {
 //   sort: string;
 // }
 
+type App = {
+  name: string;
+  url: string;
+  abbreviation?: string;
+};
+
 export type Environment = {
   appVersion: string;
   production: boolean;
   defaultPhotoUrl: string;
   messageDisplayDurationInMs: number;
+  apps: App[];
   cas: string;
   ics: string;
   amwc: string;
