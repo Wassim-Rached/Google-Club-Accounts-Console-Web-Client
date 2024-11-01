@@ -68,6 +68,12 @@ export class RolesCreateComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
+        let errorMessage = error.error || 'Failed to create permission';
+        // if error message is an object get the .error
+        if (errorMessage.error) {
+          errorMessage = errorMessage.error;
+        }
+        this.toastrService.error(errorMessage);
         this.isSubmitting = false;
       }
     });
