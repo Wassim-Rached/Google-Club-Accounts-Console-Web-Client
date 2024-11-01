@@ -47,15 +47,15 @@
       <div class="row">
         <!-- For Users -->
         <div class="col-md-4">
-          <div class="card shadow-sm mb-4 border-primary">
-            <div class="card-header bg-primary text-white">
+          <div class="card shadow-sm mb-4 border-secondary">
+            <div class="card-header bg-info text-white">
               <h5 class="mb-0">For Users</h5>
             </div>
             <div class="card-body text-dark">
               <p>
                 <strong><span class="text-muted">Before UAS:</span></strong>
               </p>
-              <ul class="list-unstyled mb-3">
+              <ul class="list-unstyled d-flex flex-column gap-2 mb-3">
                 <li>
                   <i class="fas fa-times-circle text-danger"></i>
                   Users needed to create individual accounts for each new application.
@@ -76,7 +76,7 @@
               <p>
                 <strong><span class="text-muted">With UAS:</span></strong>
               </p>
-              <ul class="list-unstyled">
+              <ul class="list-unstyled d-flex flex-column gap-2">
                 <li>
                   <i class="fas fa-check-circle text-success"></i>
                   Users enjoy a single, unified account system, giving seamless access to all Google Club services.
@@ -100,15 +100,15 @@
 
         <!-- For Admins -->
         <div class="col-md-4">
-          <div class="card shadow-sm mb-4 border-success">
-            <div class="card-header bg-success text-white">
+          <div class="card shadow-sm mb-4 border-secondary">
+            <div class="card-header bg-info text-white">
               <h5 class="mb-0">For Admins</h5>
             </div>
             <div class="card-body text-dark">
               <p>
                 <strong><span class="text-muted">Before UAS:</span></strong>
               </p>
-              <ul class="list-unstyled mb-3">
+              <ul class="list-unstyled d-flex flex-column gap-2 mb-3">
                 <li>
                   <i class="fas fa-times-circle text-danger"></i>
                   Managed separate dashboards for each application, complicating administration.
@@ -129,7 +129,7 @@
               <p>
                 <strong><span class="text-muted">With UAS:</span></strong>
               </p>
-              <ul class="list-unstyled">
+              <ul class="list-unstyled d-flex flex-column gap-2">
                 <li>
                   <i class="fas fa-check-circle text-success"></i>
                   Centralized control over accounts, permissions, and possible analytics across all applications.
@@ -153,7 +153,7 @@
 
         <!-- For Developers -->
         <div class="col-md-4">
-          <div class="card shadow-sm mb-4 border-info">
+          <div class="card shadow-sm mb-4 border-secondary">
             <div class="card-header bg-info text-white">
               <h5 class="mb-0">For Developers</h5>
             </div>
@@ -161,7 +161,7 @@
               <p>
                 <strong><span class="text-muted">Before UAS:</span></strong>
               </p>
-              <ul class="list-unstyled mb-3">
+              <ul class="list-unstyled d-flex flex-column gap-2 mb-3">
                 <li>
                   <i class="fas fa-times-circle text-danger"></i>
                   Developed separate authentication and authorization for each new project.
@@ -182,7 +182,7 @@
               <p>
                 <strong><span class="text-muted">With UAS:</span></strong>
               </p>
-              <ul class="list-unstyled">
+              <ul class="list-unstyled d-flex flex-column gap-2">
                 <li>
                   <i class="fas fa-check-circle text-success"></i>
                   Simplified development process, enabling focus on feature enhancements.
@@ -216,7 +216,6 @@
     </div>
   </div>
 </app-card>
-
 <!-- <div class="row">
   @for (sale of sales; track sale) {
     <div class="{{ sale.design }} col-xl-4">
