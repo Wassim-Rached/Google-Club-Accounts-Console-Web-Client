@@ -49,6 +49,7 @@ export interface Account {
 export class AccountsService {
   constructor(private http: HttpClient) {}
 
+  // access to accounts
   searchAccounts(
     page: number = 0,
     size: number = 10,
@@ -83,11 +84,13 @@ export class AccountsService {
     );
   }
 
+  // authorities managment
   editAccount(body: AccountEditRequest): Observable<AccountEditResponse> {
     return this.http
       .post<AccountEditResponse[]>(`${environment.ics}/api/accounts/authorities`, [body])
       .pipe(map((response) => response[0]));
   }
+
   toggleIdentityVerification(id: string, verify: boolean): Observable<string> {
     return this.http
       .post(`${environment.ics}/api/accounts/${id}/identity-verification?verify=${verify}`, {}, { responseType: 'text' })
@@ -106,3 +109,4 @@ export class AccountsService {
       .pipe(map((response) => response as string));
   }
 }
+  

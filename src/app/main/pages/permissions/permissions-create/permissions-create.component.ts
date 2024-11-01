@@ -56,7 +56,11 @@ export class PermissionsCreateComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
-        const errorMessage = error.error || 'Failed to create permission';
+        let errorMessage = error.error || 'Failed to create permission';
+        // if error message is an object get the .error
+        if (errorMessage.error) {
+          errorMessage = errorMessage.error;
+        }
         this.toastrService.error(errorMessage);
         this.isSubmitting = false;
       }
