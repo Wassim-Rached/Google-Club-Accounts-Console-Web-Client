@@ -2,9 +2,10 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { Environment } from 'src/types';
 import packageInfo from '../../package.json';
 
-export const environment = {
+export const environment: Environment = {
   appVersion: packageInfo.version,
   production: true,
   defaultPhotoUrl: 'assets/images/user/avatar-2.jpg',
@@ -19,12 +20,8 @@ export const environment = {
   ics: 'http://localhost:8080',
 
   // wc
-  amwc: 'https://account-manager-eta.vercel.app',
+  amwc: 'https://account-manager-eta.vercel.app'
   // amwc: 'http://localhost:4200'
-
-  authorities: {
-    access_client: 'acwc.perm.access_client'
-  }
 };
 /*
  * For easier debugging in development mode, you can import the following file

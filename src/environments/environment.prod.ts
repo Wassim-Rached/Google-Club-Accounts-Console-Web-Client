@@ -1,6 +1,7 @@
+import { Environment } from 'src/types';
 import packageInfo from '../../package.json';
 
-export const environment = {
+export const environment: Environment = {
   appVersion: packageInfo.version,
   production: true,
   defaultPhotoUrl: 'assets/images/user/avatar-2.jpg',
@@ -11,9 +12,5 @@ export const environment = {
   // identity and access control service
   ics: 'https://ics-server.azurewebsites.net',
   // account management web client
-  amwc: 'https://account-manager-eta.vercel.app',
-
-  authorities: {
-    access_client: 'acwc.perm.access_client'
-  }
+  amwc: 'https://account-manager-eta.vercel.app'
 };

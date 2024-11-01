@@ -14,3 +14,13 @@ export interface Page<T> {
 //   size: number;
 //   sort: string;
 // }
+
+export type Environment = {
+  appVersion: string;
+  production: boolean;
+  defaultPhotoUrl: string;
+  messageDisplayDurationInMs: number;
+  cas: string;
+  ics: string;
+  amwc: string;
+};
