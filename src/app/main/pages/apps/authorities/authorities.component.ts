@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Permission } from 'src/app/services/permissions.service';
+import { Role, RolesService } from 'src/app/services/roles/roles.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { environment } from 'src/environments/environment';
 
@@ -88,5 +90,36 @@ export class AuthoritiesComponent implements OnInit {
     }
     const type = parts[1] === 'perm' ? 'permission' : 'role';
     return type;
+  }
+
+  generateSuperRoleForApp(app: App) {
+    const permissions: any = app.authorities
+      .filter((authority) => this.authorityType(authority) === 'permission')
+      .map((authority) => {
+        const arr = authority.publicName.split('.');
+        const name = arr[2];
+        const scope = arr[1];
+        return { name, scope }; // Add id property
+      });
+
+    const superRole: any = {
+      name: 'super_role',
+      scope: app.abbreviation.toLowerCase(),
+      description: 'Super Role for app : ' + app.name,
+      permissions: permissions
+    };
+    return superRole;
+  }
+
+  downloadSuperRoleJson(app: App) {
+    const role = this.generateSuperRoleForApp(app);
+    const roleJson = RolesService.generateRoleExportJson(role);
+    const blob = new Blob([roleJson], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${app.abbreviation}.json`;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }

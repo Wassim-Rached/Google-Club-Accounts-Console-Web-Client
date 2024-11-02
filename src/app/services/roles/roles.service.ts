@@ -106,4 +106,14 @@ export class RolesService {
   public static generateRoleExportJson(role: Role): string {
     return JSON.stringify(this.generateRoleExportObject(role));
   }
+
+  public static generateSuperTesterRole(permissions: Permission[]): Role {
+    return {
+      id: 'super-tester',
+      name: 'super-tester',
+      scope: 'ics',
+      description: 'Super Tester Role is made for testing purposes, it has all permissions that certain app can require',
+      permissions: permissions
+    };
+  }
 }

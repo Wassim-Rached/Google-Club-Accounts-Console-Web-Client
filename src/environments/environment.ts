@@ -12,7 +12,7 @@ export const environment: Environment = {
   messageDisplayDurationInMs: 20000,
   apps: [
     { name: 'Central Authentication Service', url: 'https://cas-server.azurewebsites.net', abbreviation: 'CAS' },
-    { name: 'Identity and Access Control Service', url: 'http://localhost:8080', abbreviation: 'ICS' }
+    { name: 'Identity and Access Control Service', url: 'https://ics-server.azurewebsites.net', abbreviation: 'ICS' }
   ],
 
   // central authentication service
@@ -20,8 +20,8 @@ export const environment: Environment = {
   // cas: 'http://localhost:3001',
 
   // identity and access control service
-  // ics: 'https://ics-server.azurewebsites.net',
-  ics: 'http://localhost:8080',
+  ics: 'https://ics-server.azurewebsites.net',
+  // ics: 'http://localhost:8080',
 
   // wc
   amwc: 'https://account-manager-eta.vercel.app'
