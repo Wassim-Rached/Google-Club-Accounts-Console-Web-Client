@@ -7,8 +7,8 @@ export const environment: Environment = {
   defaultPhotoUrl: 'assets/images/user/avatar-2.jpg',
   messageDisplayDurationInMs: 20000,
   apps: [
-    { name: 'Central Authentication Service', url: 'https://cas-server.azurewebsites.net', abbreviation: 'CAS' },
-    { name: 'Identity and Access Control Service', url: 'https://ics-server.azurewebsites.net', abbreviation: 'ICS' }
+    { name: 'Central Authentication Service', url: 'https://cas-server-2.azurewebsites.net', abbreviation: 'CAS' },
+    { name: 'Identity and Access Control Service', url: 'https://ics-server-2.azurewebsites.net', abbreviation: 'ICS' }
   ],
 
   // central authentication service
